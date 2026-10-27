@@ -1,15 +1,14 @@
 from dataclasses import dataclass
 from datetime import datetime
-from sqlite3 import Connection
+from sqlite3 import Connection, Row
 from typing import Protocol, Self
-from passlib.context import CryptoContext
+from passlib.context import CryptContext
 
 
 class Table(Protocol):
     @staticmethod
     def create_table(conn: Connection):
         ...
-
 
 
 @dataclass
@@ -22,7 +21,7 @@ class User:
     def __post_init__(self):
         if not self.username.isalnum():
             raise ValueError("You can only use digits and letters for username")
-        if not '@' in self.email:
+        if '@' not in self.email:
             raise ValueError("Put a valid email.")
 
     @staticmethod
@@ -36,42 +35,44 @@ class User:
             )
         """)
 
-    def _hash_pass(self, pass_ctx: CryptoContext) -> None:
+    def _hash_pass(self, pass_ctx: CryptContext) -> None:
         if not self.password:
             return
-
         self.password = pass_ctx.hash(self.password)
 
-    def _compare_password(self, pass_ctx: CryptoContext, password: str) -> bool:
+    def _compare_password(self, pass_ctx: CryptContext, password: str) -> bool:
         if not self.password:
             return False
-
         return pass_ctx.verify(password, self.password)
 
-    def signup(self, pass_ctx: CryptoContext, conn: Connection):
+    def signup(self, pass_ctx: CryptContext, conn: Connection):
         self._hash_pass(pass_ctx)
         conn.execute(
             "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
             (self.username, self.email, self.password)
         )
+        conn.commit()
 
     @classmethod
-    def login(cls, pass_ctx: CryptoContext, conn: Connection, username: str, password: str) -> Self:
+    def login(cls, pass_ctx: CryptContext, conn: Connection, username: str, password: str) -> Self:
         field = 'email' if '@' in username else 'username'
-        field_value: str = username
-        cursor = conn.execute("SELECT (id, username, email, password_hash) FROM users WHERE ? = ?", (field,field_value))
+        query = f"SELECT id, username, email, password_hash FROM users WHERE {field} = ?"
+        cursor = conn.execute(query, (username,))
         row = cursor.fetchone()
+        
         if not row:
             raise ValueError("Invalid Credentials")
-        self = cls(
+            
+        user = cls(
+            id=row["id"],
             username=row["username"],
             email=row["email"],
-            password=row["password_hash"].
-            id=row["id"],
+            password=row["password_hash"]
         )
-        if not self._compare_password(pass_ctx, password):
+        if not user._compare_password(pass_ctx, password):
             raise ValueError("Invalid Credentials")
-        return self
+        return user
+
 
 @dataclass
 class Comment:
@@ -91,6 +92,7 @@ class Comment:
                 user_id INTEGER,
                 content TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY(user_id) REFERENCES users(id)
             )
         """)
@@ -121,10 +123,10 @@ class Comment:
         user_row = cursor.fetchone()
         if not user_row:
             raise ValueError("Usuário not found.")
-        user_id = user_row[0]
+        user_id = user_row["id"] if isinstance(user_row, Row) else user_row[0]
 
         conn.execute(
-            "INSERT INTO comments (post_slug, user_id, content, updated_at) VALUES (?, ?, ?, NOW())",
+            "INSERT INTO comments (post_slug, user_id, content, updated_at) VALUES (?, ?, ?, datetime('now'))",
             (self.post_slug, user_id, self.content)
         )
         conn.commit()
