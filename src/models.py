@@ -2,13 +2,13 @@ from dataclasses import dataclass
 from datetime import datetime
 from sqlite3 import Connection, Row
 from typing import Protocol, Self
+
 from passlib.context import CryptContext
 
 
 class Table(Protocol):
     @staticmethod
-    def create_table(conn: Connection):
-        ...
+    def create_table(conn: Connection): ...
 
 
 @dataclass
@@ -20,8 +20,10 @@ class User:
 
     def __post_init__(self):
         if not self.username.isalnum():
-            raise ValueError("You can only use digits and letters for username")
-        if '@' not in self.email:
+            raise ValueError(
+                "You can only use digits and letters for username"
+            )
+        if "@" not in self.email:
             raise ValueError("Put a valid email.")
 
     @staticmethod
@@ -48,26 +50,36 @@ class User:
     def signup(self, pass_ctx: CryptContext, conn: Connection):
         self._hash_pass(pass_ctx)
         conn.execute(
-            "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
-            (self.username, self.email, self.password)
+            "INSERT INTO users (username, email, password_hash)"
+            " VALUES (?, ?, ?)",
+            (self.username, self.email, self.password),
         )
         conn.commit()
 
     @classmethod
-    def login(cls, pass_ctx: CryptContext, conn: Connection, username: str, password: str) -> Self:
-        field = 'email' if '@' in username else 'username'
-        query = f"SELECT id, username, email, password_hash FROM users WHERE {field} = ?"
+    def login(
+        cls,
+        pass_ctx: CryptContext,
+        conn: Connection,
+        username: str,
+        password: str,
+    ) -> Self:
+        field = "email" if "@" in username else "username"
+        query = (
+            "SELECT id, username, email, password_hash "
+            f"FROM users WHERE {field} = ?"
+        )
         cursor = conn.execute(query, (username,))
         row = cursor.fetchone()
-        
+
         if not row:
             raise ValueError("Invalid Credentials")
-            
+
         user = cls(
             id=row["id"],
             username=row["username"],
             email=row["email"],
-            password=row["password_hash"]
+            password=row["password_hash"],
         )
         if not user._compare_password(pass_ctx, password):
             raise ValueError("Invalid Credentials")
@@ -99,7 +111,8 @@ class Comment:
 
     @classmethod
     def list_all(cls, conn: Connection, slug: str) -> list[Self]:
-        cursor = conn.execute("""
+        cursor = conn.execute(
+            """
             SELECT
                 comments.id AS id,
                 comments.post_slug AS post_slug,
@@ -107,26 +120,27 @@ class Comment:
                 comments.content AS content,
                 comments.created_at AS created_at,
                 comments.updated_at AS updated_at
-            FROM comments 
-            JOIN users ON comments.user_id = users.id 
-            WHERE comments.post_slug = ? 
+            FROM comments
+            JOIN users ON comments.user_id = users.id
+            WHERE comments.post_slug = ?
             ORDER BY comments.id DESC
-        """, (slug,))
-        return [
-            cls(**row)
-            for row
-            in cursor.fetchall()
-        ]
+        """,
+            (slug,),
+        )
+        return [cls(**row) for row in cursor.fetchall()]
 
     def post_comment(self, conn: Connection):
-        cursor = conn.execute("SELECT id FROM users WHERE username = ?", (self.username,))
+        cursor = conn.execute(
+            "SELECT id FROM users WHERE username = ?", (self.username,)
+        )
         user_row = cursor.fetchone()
         if not user_row:
             raise ValueError("Usuário not found.")
         user_id = user_row["id"] if isinstance(user_row, Row) else user_row[0]
 
         conn.execute(
-            "INSERT INTO comments (post_slug, user_id, content, updated_at) VALUES (?, ?, ?, datetime('now'))",
-            (self.post_slug, user_id, self.content)
+            "INSERT INTO comments (post_slug, user_id, content, updated_at) "
+            "VALUES (?, ?, ?, datetime('now'))",
+            (self.post_slug, user_id, self.content),
         )
         conn.commit()
