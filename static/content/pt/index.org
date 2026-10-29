@@ -1,5 +1,11 @@
-#+title: Meu Blog
-#+author: Edmilson Monteiro Rodrigues Neto
+#+TITLE: Meu Blog
+#+SUBTITLE: Um espaço livre
+#+AUTHOR: Edmilson Monteiro Rodrigues Neto
+
+#+HTML_DOCTYPE: html5
+#+OPTIONS: toc:nil author:nil date:nil timestamp:nil html5-fancy:t html-postamble:nil
+
+
 
 * Seja muito bem vindo ao meu blog pessoal.
 
