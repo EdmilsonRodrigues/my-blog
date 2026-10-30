@@ -74,51 +74,41 @@ header nav a:hover {
 }
 
 /* ==========================================================================
-   Main Layout (Sidebar + Content Grid)
+   Main Layout (Grid de 2 Colunas: Conteúdo + Aside Lateral)
    ========================================================================== */
-/* Garante que o container principal coloque o conteúdo e o aside lado a lado no desktop */
 main {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2.5rem;
+  gap: 3rem;
   align-items: start;
 }
 
+/* No desktop, criamos 2 colunas: o conteúdo principal ocupa a esquerda (1fr) e o aside a direita (300px) */
 @media (min-width: 768px) {
-  /* Se houver um aside, dividimos em colunas fixas: Conteúdo principal (3fr) e Aside (1fr) */
   main {
-    grid-template-columns: 1fr 280px;
+    grid-template-columns: 1fr 300px;
+  }
+
+  /* Joga o aside para a coluna da direita e o faz acompanhar a rolagem (sticky) */
+  aside {
+    grid-column: 2;
+    grid-row: 1 / span 100;
+    position: sticky;
+    top: 2rem;
+  }
+
+  /* Garante que o conteúdo e as seções fiquem estritamente na coluna da esquerda */
+  section, article, div:not(#preamble):not(#postamble) {
+    grid-column: 1;
   }
 }
 
-/* Agrupador de seções e artigos */
-section, article {
-  display: block;
-  width: 100%;
-}
-
-/* ==========================================================================
-   Aside Sidebar (Fixada na Lateral)
-   ========================================================================== */
+/* Estilização limpa do Aside */
 aside {
   background-color: #18181b;
   padding: 1.5rem;
   border-radius: 8px;
   border: 1px solid var(--border-color);
-}
-
-@media (min-width: 768px) {
-  aside {
-    grid-column: 2;
-    grid-row: 1 / span 10;
-    position: sticky;
-    top: 2rem;
-  }
-  
-  /* Faz o conteúdo principal ocupar a primeira coluna quando o aside existir */
-  section, article {
-    grid-column: 1;
-  }
 }
 
 aside h3, aside h1, aside h2 {
