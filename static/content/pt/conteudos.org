@@ -13,7 +13,7 @@
 
 ** Linux
 *** Básico
-+ [[/pt/linux/basico/][Introdução ao GNU Linux]]
-  + [[/pt/linux/basico/introducao.org][Introdução à Linha de Comando]]
++ [[./linux/basico/][Introdução ao GNU Linux]]
+  + [[./linux/basico/introducao.org][Introdução à Linha de Comando]]
 
 #+INCLUDE: "./templates/layout-end.org"

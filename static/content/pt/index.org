@@ -18,11 +18,11 @@
 
 ** Conteúdos Principais
 
-+ [[/pt/linux/basico/][Introdução ao GNU Linux]]
++ [[./linux/basico/][Introdução ao GNU Linux]]
 
 ** Posts Favoritos
 
-+ [[/pt/linux/basico/introducao.org][Introdução à Linha de Comando]]
++ [[./linux/basico/introducao.org][Introdução à Linha de Comando]]
 
 
 #+INCLUDE: "./templates/layout-end.org"

@@ -25,6 +25,6 @@ Desktop, ou Rocky Desktop, ou, se já tiver saído, o HeroanaOS.
 
 Segue o índice das aulas do curso até agora:
 
-+ [[/pt/linux/basico/introducao.org][Introdução à linha de comando]]
++ [[./introducao.org][Introdução à linha de comando]]
 
 #+INCLUDE: "../../templates/layout-end.org"
