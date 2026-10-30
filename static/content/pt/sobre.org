@@ -9,6 +9,7 @@
 
 #+INCLUDE: "./templates/layout-start.org"
 
+
 * Seja muito bem vindo ao meu blog pessoal.
 
 ** Quem sou eu?

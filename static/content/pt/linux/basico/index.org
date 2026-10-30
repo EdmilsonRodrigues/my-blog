@@ -27,5 +27,4 @@ Segue o índice das aulas do curso até agora:
 
 + [[./introducao.org][Introdução à linha de comando]]
 
-
 #+INCLUDE: "../../templates/layout-end.org"

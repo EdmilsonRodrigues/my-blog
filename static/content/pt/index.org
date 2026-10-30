@@ -7,6 +7,7 @@
 
 #+OPTIONS: toc:nil author:nil date:nil timestamp:nil
 
+
 #+INCLUDE: "./templates/layout-start.org"
 
 * Seja muito bem vindo ao meu blog pessoal.
