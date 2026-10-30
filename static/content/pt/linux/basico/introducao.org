@@ -140,23 +140,23 @@ O resto do que foi mostrado é devido ao argumento -a (Forma curta de --all).
 Argumentos costumam ser usados com um hífem e uma letra, ou dois hífens e o nome completo.
 
 E o que esse output gigante significa?
-+ Linux
++ =Linux=
   O nome do kernel Linux.
-+ familia
++ =familia=
   Ele diz o nome do seu usuáio
-+ 6.12.0-211.67.1.el10_2.x86_64
++ =6.12.0-211.67.1.el10_2.x86_64=
   Ele mostra a versão do seu Kernel
-+ #1
++ =#1=
   É o número da build do kernel
-+ SMP
++ =SMP=
   Significa Symmetric MultiProcessing significando que esse kernel foi buildado pra um computador com mais de 1 core de CPU
-+ PREEMPT_DYNAMIC
++ =PREEMPT_DYNAMIC=
   Descreve como o sistema lida com multitasking (Não aprofundarei agora)
-+ Tue Oct 20 15:00:54 UTC 2026
++ =Tue Oct 20 15:00:54 UTC 2026=
   A data e hora que o Kernel foi compilado
-+ x86_64
++ =x86_64=
   A arquitetura de processador para a qual o sistema foi feito.
-+ GNU/Linux
++ =GNU/Linux=
   O nome do sistema operacional.
 
 Como você pode ver, Linux é um kernel. O sistema operacional se chama GNU/Linux, e é assim que você me verá tratando ele ao

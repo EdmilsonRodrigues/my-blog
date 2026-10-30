@@ -1,5 +1,9 @@
 #+BEGIN_aside
-This is an aside
 
-A huge one
+Principais conteúdos
+
++ [[https://blog.edmilsonrodrigues.net.br/pt/linux/basico/][Introdução ao GNU Linux]]
+  + [[https://blog.edmilsonrodrigues.net.br/pt/linux/basico/introducao.html][Introdução à Linha de Comando]]
+
+
 #+END_aside
