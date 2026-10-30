@@ -9,16 +9,11 @@
 
 #+INCLUDE: "./templates/layout-start.org"
 
-* Seja muito bem vindo ao meu blog pessoal.
+* Índice do Heroana Blog.
 
-** Conteúdos Recentes
- 
-
-** Conteúdos Principais
-
-
-** Posts Favoritos
-
-
+** Linux
+*** Básico
++ [[/pt/linux/basico/][Introdução ao GNU Linux]]
+  + [[/pt/linux/basico/introducao.org][Introdução à Linha de Comando]]
 
 #+INCLUDE: "./templates/layout-end.org"

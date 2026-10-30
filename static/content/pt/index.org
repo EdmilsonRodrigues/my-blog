@@ -12,13 +12,16 @@
 * Seja muito bem vindo ao meu blog pessoal.
 
 ** Conteúdos Recentes
- 
+
++ [[/pt/linux/basico/introducao.org][Introdução à Linha de Comando]]
++ [[/pt/linux/basico/][Introdução ao GNU Linux]]
 
 ** Conteúdos Principais
 
++ [[/pt/linux/basico/][Introdução ao GNU Linux]]
 
 ** Posts Favoritos
 
-
++ [[/pt/linux/basico/introducao.org][Introdução à Linha de Comando]]
 
 #+INCLUDE: "./templates/layout-end.org"

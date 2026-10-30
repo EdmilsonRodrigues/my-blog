@@ -10,26 +10,11 @@
 
 #+INCLUDE: "../../templates/layout-start.org"
 
-* GNU Linux: Uma introdução
-
-GNU Linux é, sem sombra de dúvidas, o melhor sistema operacional já criado. Contudo, apesar de migrar de outro sistema para GNU
-Linux seja algo relativamente simples, principalmente se você não for dependente da suite da Adobe, ou algo assim, realmente
-entender o sistema é algo que nem todos precisam, mas, que pode trazer bastantes facilidades e poder.
-
-Bom, justamente por ter muita coisa pra ser abordada, eu decidi criar esse curso. Esse é um pequeno curso de GNU Linux, que vamos
-abordar todo o conteúdo da LPIC-1, e tentar aprofundar um pouco mais.
-
-Bom, mas pra esse não ser só um post pra te fazer esperar pelo próximo, vamos começar com um pouquinho de linha de comando, que é
-a parte que muita gente se assusta, mas, os shells POSIX, são uma das melhores coisas para quando se está admnistrando um sistema.
-(Não preciso nem dizer que pra acompanhar esse curso, você vai precisar estar em uma máquina Linux, seja seu computador, ou uma VM,
-mas é muito importante que seja alguma distro com interface gráfica, não uma distro de servidor, recomendo Linux Mint, ou Ubuntu
-Desktop, ou Rocky Desktop, ou, se já tiver saído, o HeroanaOS.).
-
-** Shell, Terminal, Emulador de terminal, Linha de comando
+* Shell, Terminal, Emulador de terminal, Linha de comando
 
 Okay, então vamos começar com um pouco de terminologia básica.
 
-*** O que é um shell?
+** O que é um shell?
 
 Shell é um programa. Um software como qualquer outro. Na verdade, mais especificamente, um shell é um interpretador.
 
@@ -83,7 +68,7 @@ você provavelmente está usando um desses, logo, não se preocupe, tudo isso va
 
 Agora, estou há um tempo falando de terminal / emulador de terminal. O que exatamennte é isso?
 
-*** Terminal vs Emulador de terminal
+** Terminal vs Emulador de terminal
 
 Veremos isso de forma mais aprofundada em outro artigo, contudo, por agora, para que você não saia com muita curiosidade daqui:
 
@@ -118,12 +103,12 @@ intercambiável.
 
 O que um terminal faz? Ele roda um shell no modo REPL. Esse shell é onde você vai trabalhar.
 
-** Conhecendo comandos básicos
+* Conhecendo comandos básicos
 
 Okay, então, dado que já sabemos que estamos rodando um shell dentro do nosso emulador de terminal, vamos começar a aprender como
 fazer coisas com ele. A partir de agora, vou considerar que você está com seu emulador de terminal aberto.
 
-*** Pegar informações do sistema
+** Pegar informações do sistema
 
 Pra começar, podemos ver onde exatamente nós estamos dentro do seu disco pelo comando =pwd=.
 
@@ -190,7 +175,7 @@ O comando touch tocou um arquivo, relativo a esse diretório. Caso esse arquivo 
 altera a data da última modificação (como se literalmente cutucasse o arquivo).
 O comando uname mostra informações sobre o sistema. Ele tem outras flags, e você pode brincar com elas se quiser.
 
-*** Pegar informações sobre um comando.
+** Pegar informações sobre um comando.
 
 Se você tem dúvidas sobre o funcionamento de um comando, você pode usar o comando man. Por exemplo, com =man uname= você vai ver
 o manual do comando uname, que flags ele acita, o que elas mostram, o autor do programa, como reportar bugs, etc.
@@ -271,7 +256,7 @@ Que comandos vimos até aqui?
 
 Rodamos muitos comandos até agora? E se eu quiser rodar de novo um comando que já rodei antes?
 
-*** Usando seu histórico de comandos
+** Usando seu histórico de comandos
 
 Você pode usar as setas pra cima e pra baixo pra rodar de novo um comando já usado anteriormente.
 
@@ -284,7 +269,7 @@ comandos rodados por aquela shell e usuário.
 
 Anteriormente, falamos sobre a variável de ambiente $PATH. Mas o que é uma variável de ambiente?
 
-*** Variáveis de ambiente
+** Variáveis de ambiente
 
 Todo sistema operacional possui variáveis de ambiente. Variáveis específicas de um ambiente do sistema, que podem ser usadas para
 configurações do sistema.
@@ -335,7 +320,7 @@ Okay, pra recapitular, vimos aqui os segiuntes comandos:
 Lembrando que as variáveis são referentes ao ambiente. Se eu exportar uma variável de ambiente em um shell, matar ele com exit, e
 abrir um novo, o novo não compartilhará das variáveis exportadas anteriormente, pois são ambientes irmãos, não filhos.
 
-*** Usando aspas
+** Usando aspas
 
 Algo importante no GNU/Linux é entender o uso das aspas.
 
@@ -367,7 +352,7 @@ Para remover, use o comando =rm= seguido pela lista de arquivos a ser removido:
 Vimos um novo comando:
 + rm => Remove (Remove arquivos)
 
-** Encerramento
+* Encerramento
 
 Bom, nesse tempo, vimos um pouco sobre shells e terminais, e aprendemos alguns comandos:
 + touch

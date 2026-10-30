@@ -1,0 +1,30 @@
+#+TITLE: Introdução ao GNU Linux
+#+SUBTITLE: Conhecendo mais sobre Linux
+#+AUTHOR: Edmilson Monteiro Rodrigues Neto
+#+EMAIL: edmilson.rodriguesn38@gmail.com
+#+DESCRIPTION: Uma introdução ao curso de Linux básico de GNU Linux.
+#+KEYWORDS: linux, gnu, unix, shell, bash
+#+INDEX: Linux!Básico
+
+#+OPTIONS: toc:nil author:nil date:nil timestamp:nil
+
+#+INCLUDE: "../../templates/layout-start.org"
+
+* GNU Linux: Uma introdução
+
+GNU Linux é, sem sombra de dúvidas, o melhor sistema operacional já criado. Contudo, apesar de migrar de outro sistema para GNU
+Linux seja algo relativamente simples, principalmente se você não for dependente da suite da Adobe, ou algo assim, realmente
+entender o sistema é algo que nem todos precisam, mas, que pode trazer bastantes facilidades e poder.
+
+Bom, justamente por ter muita coisa pra ser abordada, eu decidi criar esse curso. Esse é um pequeno curso de GNU Linux, que vamos
+abordar todo o conteúdo da LPIC-1, e tentar aprofundar um pouco mais.
+
+Não preciso nem dizer que pra acompanhar esse curso, você vai precisar estar em uma máquina Linux, seja seu computador, ou uma VM,
+mas é muito importante que seja alguma distro com interface gráfica, não uma distro de servidor, recomendo Linux Mint, ou Ubuntu
+Desktop, ou Rocky Desktop, ou, se já tiver saído, o HeroanaOS.
+
+Segue o índice das aulas do curso até agora:
+
++ [[/pt/linux/basico/introducao.org][Introdução à linha de comando]]
+
+#+INCLUDE: "../../templates/layout-end.org"
