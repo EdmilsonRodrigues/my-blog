@@ -13,8 +13,8 @@
 
 ** Conteúdos Recentes
 
-+ [[./pt/linux/basico/introducao.org][Introdução à Linha de Comando]]
-+ [[./pt/linux/basico/][Introdução ao GNU Linux]]
++ [[./linux/basico/introducao.org][Introdução à Linha de Comando]]
++ [[./linux/basico/][Introdução ao GNU Linux]]
 
 ** Conteúdos Principais
 
