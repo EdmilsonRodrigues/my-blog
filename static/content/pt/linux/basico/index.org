@@ -2,6 +2,7 @@
 #+SUBTITLE: Conhecendo mais sobre Linux
 #+AUTHOR: Edmilson Monteiro Rodrigues Neto
 #+EMAIL: edmilson.rodriguesn38@gmail.com
+#+DATE: <2026-10-30 Fri>
 #+DESCRIPTION: Uma introdução ao curso de Linux básico de GNU Linux.
 #+KEYWORDS: linux, gnu, unix, shell, bash
 #+INDEX: Linux!Básico
@@ -26,5 +27,6 @@ Desktop, ou Rocky Desktop, ou, se já tiver saído, o HeroanaOS.
 Segue o índice das aulas do curso até agora:
 
 + [[./introducao.org][Introdução à linha de comando]]
+
 
 #+INCLUDE: "../../templates/layout-end.org"
