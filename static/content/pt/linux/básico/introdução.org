@@ -1,0 +1,393 @@
+#+TITLE: Introdução à linha de comando
+#+SUBTITLE: Conhecendo os comandos GNU e Unix
+#+AUTHOR: Edmilson Monteiro Rodrigues Neto
+#+EMAIL: edmilson.rodriguesn38@gmail.com
+#+DESCRIPTION: Uma introdução ao curso de Linux básico de GNU Linux, iniciando com um pouco de shell.
+#+KEYWORDS: linux, gnu, unix, shell, bash
+#+INDEX: Linux!Básico!Introdução á Linha de Comando
+
+#+OPTIONS: toc:nil author:nil date:nil timestamp:nil
+
+#+INCLUDE: "../../templates/layout-start.org"
+
+* GNU Linux: Uma introdução
+
+GNU Linux é, sem sombra de dúvidas, o melhor sistema operacional já criado. Contudo, apesar de migrar de outro sistema para GNU
+Linux seja algo relativamente simples, principalmente se você não for dependente da suite da Adobe, ou algo assim, realmente
+entender o sistema é algo que nem todos precisam, mas, que pode trazer bastantes facilidades e poder.
+
+Bom, justamente por ter muita coisa pra ser abordada, eu decidi criar esse curso. Esse é um pequeno curso de GNU Linux, que vamos
+abordar todo o conteúdo da LPIC-1, e tentar aprofundar um pouco mais.
+
+Bom, mas pra esse não ser só um post pra te fazer esperar pelo próximo, vamos começar com um pouquinho de linha de comando, que é
+a parte que muita gente se assusta, mas, os shells POSIX, são uma das melhores coisas para quando se está admnistrando um sistema.
+(Não preciso nem dizer que pra acompanhar esse curso, você vai precisar estar em uma máquina Linux, seja seu computador, ou uma VM,
+mas é muito importante que seja alguma distro com interface gráfica, não uma distro de servidor, recomendo Linux Mint, ou Ubuntu
+Desktop, ou Rocky Desktop, ou, se já tiver saído, o HeroanaOS.).
+
+** Shell, Terminal, Emulador de terminal, Linha de comando
+
+Okay, então vamos começar com um pouco de terminologia básica.
+
+*** O que é um shell?
+
+Shell é um programa. Um software como qualquer outro. Na verdade, mais especificamente, um shell é um interpretador.
+
+Você, programador, que roda seu programa com =node index.js=, por exemplo, está chamando o node (um interpretador) para interpretar
+um arquivo de texto, escrito na linguagem que aquele interpretador entende (JavaScript no exemplo).
+
+Um shell funciona da exata mesma forma, é um interpretador capaz de ler arquivos escritos em shell script.
+
+Para seguirmos, crie um arquivo (exemplo: hello-world.sh) com seu editor de textos favorito e escreva dentro o seguinte conteúdo:
+
+#+BEGIN_SRC shell
+  echo "Olá, Mundo"
+#+END_SRC
+
+Em seguida, salve o arquivo, abra algum terminal ou emulador de terminal (Já iremos abordar isso, mas é a tela preta de digitar
+comandos), e rode o seguinte comando: =sh /caminho/até/seu/arquivo/hello-world.sh=.
+
+Ao fazer isso, você deve ver, na tela do terminal, escrito =Olá, Mundo=.
+
+Perfeitamente. Contudo, assim como interpretadores não conseguem somente ler arquivos, o shell também possui outra capacidade muito
+importante: Um Read Eval Print Loop (REPL).
+
+Assim como, se você escrever apenas: =node=, ou =python=, sem passar o nome de um arquivo, você entra no REPL desses interpretadores,
+os shells também possuem um REPL.
+
+E o que seria um REPL? É basicamente uma modo do interpretador em que ele vai ler linha por linha do que você escrever, avaliar e
+mostrar o resultado abaixo, de forma imediata, como se fosse um arquivo em construção, que é escrito em tempo real.
+
+Quando você abre o seu terminal ou emulador de terminal, ele imediatamente abre um shell para rodar dentro dele, e, nesse terminal,
+você está interagindo com o shell.
+
+Por isso, podemos não só ler arquivos, como também executar comandos direto do terminal, pois ele tem o REPL do shell aberto.
+
+No seu terminal agora, digite:
+
+#+BEGIN_SRC shell
+  echo "Olá, Mundo"
+#+END_SRC
+
+Depois do enter, você deve ver escrito na tela: Olá, Mundo.
+
+Como podemos ver, o REPL do shell aberto no seu terminal, leu o comando que você deu, avaliou, e printou o output dele na tela.
+
+Quando falamos da linha de comando, normalmente nos referimos ao REPL do shell que aparece quando você abre um terminal.
+
+Por fim, devo dizer que estarei aqui falando apenas de Shells que seguem a especificação POSIX. Isso inclui o shell borne, o bash,
+o zsh, o dash, entre outros. Isso não inclui Fish, ou outros shells similares.
+
+(Se isso te deixou confuso, saiba que a maioria das distros linux vêm com dash, bash ou zsh, logo, se você não fez nada para mudar,
+você provavelmente está usando um desses, logo, não se preocupe, tudo isso vai ficar mais claro com o tempo.)
+
+Agora, estou há um tempo falando de terminal / emulador de terminal. O que exatamennte é isso?
+
+*** Terminal vs Emulador de terminal
+
+Veremos isso de forma mais aprofundada em outro artigo, contudo, por agora, para que você não saia com muita curiosidade daqui:
+
+*Leia antes de executar, para não se desesperar.*
+
+Suponho eu que você leu o aviso, e está rodando em uma interface gráfica. Se não, entre em uma, por favor.
+
+Okay, se está, pressione Ctrl+Alt+F2. Nada deve acontecer. Esse costuma ser o caminho para a sua interface gráfica.
+
+Agora, pressione Ctrl+Alt+F3 (Para retornar, pressione Ctrl+Alt+F2).
+
+O que você viu, ao pressionar Ctrl+Alt+F3 foi um terminal do seu computador.
+
+Cada distro tem diversos terminais. Esses são conhecidos como tty (Teletypewriter). Se você fizer login nele, com seu usuário e
+senha, você pode por exemplo executar o comando =tty=.
+
+Você deve receber um output como: =/dev/tty3=. (Explicaremos mais sobre esse output em outro artigo).
+
+Esse output indica que você está em um terminal.
+
+Agora que você voltou para a interface gráfica, abra o terminal da sua interface gráfica e rode o mesmo comando: =tty=.
+
+Você deve receber um output como: =/dev/pts0=.
+
+Isso indica que você não está rodando em um terminal, mas sim em um Pseudo-Terminal Slave (PTS).
+
+Isso acontece pois o programa que roda um terminal na sua interface gráfica é, na realidade, um emulador de terminal. Ele imita o
+comportamento de um terminal real, mas ele se conecta a um Pseudo Terminal, e não a um terminal real.
+
+Na prática, a diferença é quase nula e, se não estivermos falando disso, usarei os termos terminal e emulador de terminal de forma
+intercambiável.
+
+O que um terminal faz? Ele roda um shell no modo REPL. Esse shell é onde você vai trabalhar.
+
+** Conhecendo comandos básicos
+
+Okay, então, dado que já sabemos que estamos rodando um shell dentro do nosso emulador de terminal, vamos começar a aprender como
+fazer coisas com ele. A partir de agora, vou considerar que você está com seu emulador de terminal aberto.
+
+*** Pegar informações do sistema
+
+Pra começar, podemos ver onde exatamente nós estamos dentro do seu disco pelo comando =pwd=.
+
+O output será algo como: =/home/familia=.
+
+Esse é o caminho até o diretório onde o seu shell está no momento.
+
+Vamos então, criar um arquivo, com =touch novoarquivo=. Se você abrir seu explorador de arquivos agora, você deve ver que esse
+arquivo foi criado dentro do diretório onde seu shell estava, e ele está vazio.
+
+Você também pode ver isso diretamente pelo shell, através do comando =ls=. Você deve ver todos os exatos mesmos arquivos e diretórios
+que você vê no seu explorador de arquivos, serem mostrados na tela, inclusive o arquivo novoarquivo.
+
+Por fim, vamos pegar algumas infos do nosso sistema com o comando =uname -a=.
+
+Você deve receber um output semelhante a:
+
+=Linux familia 6.12.0-211.67.1.el10_2.x86_64 #1 SMP PREEMPT_DYNAMIC Tue Oct 20 15:00:54 UTC 2026 x86_64 GNU/Linux=.
+
+Okay, vamos destrinchar melhor esse aqui.
+
+Primeiro, o que seria o -a? Isso é o que chamamos de flags, ou argumentos.
+
+São modificadores que podemos passar para um comando para alterar seu comportamento. Tente rodar somente =uname=.
+O output provavelmente será somente =Linux=.
+
+O resto do que foi mostrado é devido ao argumento -a (Forma curta de --all).
+
+Argumentos costumam ser usados com um hífem e uma letra, ou dois hífens e o nome completo.
+
+E o que esse output gigante significa?
++ Linux
+  O nome do kernel Linux.
++ familia
+  Ele diz o nome do seu usuáio
++ 6.12.0-211.67.1.el10_2.x86_64
+  Ele mostra a versão do seu Kernel
++ #1
+  É o número da build do kernel
++ SMP
+  Significa Symmetric MultiProcessing significando que esse kernel foi buildado pra um computador com mais de 1 core de CPU
++ PREEMPT_DYNAMIC
+  Descreve como o sistema lida com multitasking (Não aprofundarei agora)
++ Tue Oct 20 15:00:54 UTC 2026
+  A data e hora que o Kernel foi compilado
++ x86_64
+  A arquitetura de processador para a qual o sistema foi feito.
++ GNU/Linux
+  O nome do sistema operacional.
+
+Como você pode ver, Linux é um kernel. O sistema operacional se chama GNU/Linux, e é assim que você me verá tratando ele ao
+longo dos posts.
+
+Okay, então, vamos com calma. O que cada um desses 4 comandos fez?
+
++ pwd => Print Work Directory
++ ls => List
++ touch => Touch
++ uname => Unix Name
+
+O comando pwd imprimiu na tela o diretório em que você está trabalhando
+O comando ls listou na tela o que exisite nesse diretório
+O comando touch tocou um arquivo, relativo a esse diretório. Caso esse arquivo não exista, ele cria. Caso já exista, ele apenas
+altera a data da última modificação (como se literalmente cutucasse o arquivo).
+O comando uname mostra informações sobre o sistema. Ele tem outras flags, e você pode brincar com elas se quiser.
+
+*** Pegar informações sobre um comando.
+
+Se você tem dúvidas sobre o funcionamento de um comando, você pode usar o comando man. Por exemplo, com =man uname= você vai ver
+o manual do comando uname, que flags ele acita, o que elas mostram, o autor do programa, como reportar bugs, etc.
+
+O comando man procura as páginas de manual do programa. Se você olhar no topo do manual, vc vai ver uname(1), indicando que está
+mostrando as páginas de manual do comando uname, que se encontram no bloco de manuais 1.
+
+Existem vários blocos de manual, e às vezes, os criadores de um programa podem criar mais de uma página de manual pra um programa.
+
+O programa uname tem páginas de manual no bloco 1 e no bloco 2. Para acessar a segunda página de manual dele, você pode usar o
+comando =man 2 uname=.
+
+Outro programa que pode ser usado para pegar páginas de manual é o comando info. Ele gera outro formato de visualização, que pode
+ser acessado com =info uname=. Contudo, nem todo programa tem o info, e muitas vezes, o info só aponta pras páginas de manual. O
+man vai ter a informação da maioria dos comandos.
+
+Agora, e se eu não lembrar o comando que eu quero executar?
+
+Bom, se eu sei o que esse comando faz (exemplo: mostra a versão do kernel), eu consigo fazer uma busca nas man pages, através do
+comando =apropos kernel=, por exemplo. Esse comando vai ler todas as páginas de manual, buscar pelo termo kernel, e ele vai me
+mostrar uma lista de todas as páginas de manual que contém a palavra kernel, e a primeira linha em que essa palavra aparece, em
+ordem alfabética.
+
+O comando =apropos "regular expression"=, por exemplo, irá fazer o mesmo, contudo para as páginas de manual com o termo regular
+expression, como os programas bzgrep, re, regex, entre outros.
+
+Uma outra forma de pegar info rápida sobre um comando é com o comando type.
+
+#+BEGIN_SRC shell
+  ➜  type uname cp kill which touch ls clear echo
+  uname is /usr/bin/uname
+  cp is /usr/bin/cp
+  kill is a shell builtin
+  which is an alias for alias | /usr/bin/which --tty-only --read-alias --show-tilde --show-dot
+  touch is /usr/bin/touch
+  ls is an alias for ls --color=tty
+  clear is /home/linuxbrew/.linuxbrew/bin/clear
+  echo is a shell builtin
+#+END_SRC
+
+Esse comando diz o tipo de cada comando que você passar para ele.
++ uname é um programa, que se encontra em /usr/bin/uname
++ cp é um programa, que se encontra em /usr/bin/cp
++ kill é uma função builtin do shell.
++ which é um alias para o comando =alias | /usr/bin/which --tty-only --read-alias --show-tilde --show-dot=
++ touch é um programa que se encontra em /usr/bin/touch
++ ls é um alias para o comand =ls --color=tty=
++ clear é um programa que se encontra em /home/linuxbrew/.linuxbrew/bin/clear
++ echo é uma função builtin do shell
+
+Como deu pra ver, um comando shell pode ter vários tipos:
+
++ Programa => Significa que ele é um programa completo, seja um binário, seja um arquivo interpretável, em algum lugar no sistema,
+  normalmente dentro de subpastas /bin, de binário, embora nem todos os programas lá sejam binários, programas executáveis ficam lá.
+  Esses caminhos onde guardamos os executáveis se encontram na variável de ambiente $PATH. Veremos mais sobre ela logo.
++ Funções builtin => Assim como no python temos a função print, map, no JS temos console.log, etc, o shell também possui funções
+  builtin.
++ Alias => É um apelido que damos para outro comando, para simplificar.
+
+
+Se eu apenas quiser saber onde é o caminho completo do programa, se for um programa, eu posso usar o comando =which=.
+
+#+BEGIN_SRC shell
+  ➜  which uname which
+  which='alias | /usr/bin/which --tty-only --read-alias --show-tilde --show-dot'
+            /usr/bin/alias
+            /usr/bin/which
+  /usr/bin/uname
+#+END_SRC
+
+Que comandos vimos até aqui?
+
++ man => Manual (Lê a página de manual de um programa)
++ info => Information (Lê a página de informação de um program)
++ apropos => À propos (a propósito de) (Busca nas páginas de manual por termos específicos)
++ type => Type (Mostra o tipo do comando)
++ which => Which (Mostra o caminho do programa)
+
+Rodamos muitos comandos até agora? E se eu quiser rodar de novo um comando que já rodei antes?
+
+*** Usando seu histórico de comandos
+
+Você pode usar as setas pra cima e pra baixo pra rodar de novo um comando já usado anteriormente.
+
+Essa informação é guardada em um arquivo na home do seu usuário, pra sua shell.
+
+Se você usa o bash, por exemplo, será no arquivo .bash_history, o zsh no .zsh_history, e assim por diante.
+
+Apesar de você poder abrir esses arquivos para ler, você também pode rodar o comando =history=. Ele mostrará em ordem os últimos
+comandos rodados por aquela shell e usuário.
+
+Anteriormente, falamos sobre a variável de ambiente $PATH. Mas o que é uma variável de ambiente?
+
+*** Variáveis de ambiente
+
+Todo sistema operacional possui variáveis de ambiente. Variáveis específicas de um ambiente do sistema, que podem ser usadas para
+configurações do sistema.
+
+A variável PATH por exemplo, guarda os caminhos para diretórios que contém programas executáveis no sistema, separados por :.
+
+Quando você usa um comando no shell, ele checa se é uma builtin, se não for, ele procura um alias, se não for, ele procura em cada
+diretório dentro da variável PATH, se existir, ele roda aquele programa.
+
+Você pode ver todas as variáveis de ambiente do seu sistema pelo comando =env=. Esse comando vai listar todas as variáveis de
+ambiente do seu ambiente shell naquele momento.
+
+Você pode ver apenas uma variável específica referenciando ela no echo, por exemplo: =echo $PATH=.
+
+Esse comando irá imprimir na tela o conteúdo da variável de ambiente PATH. Isso acontece pois o shell expande qualquer termo iniciado
+com $, procurando uma variável de ambiente com aquele nome.
+
+Você pode, por exemplo, fazer =echo $abacate=, e nada aparecerá. Contudo, se fizer: =export abacate=bonito=, seguido de
+=echo $abacate=, você verá escrito na tela bonito, assim como verá ela se rodar o comando env.
+
+Isso acontece pois você exportou a variável abacate para o ambiente. Você também pode criar a variável, sem exportá-la para o
+ambiente, com =vovo=jojo=. Ao rodar =echo $vovo= você deve ver jojo na tela, mas não verá essa entrada no =env= pois você não
+exportou ela para o ambiente.
+
+Inclusive, variáveis que estão no ambiente são acessíveis por subshells.
+
+Ao rodar =bash=. Você está criando um novo shell, que compartilha o ambiente do shell pai. Nesse novo shell, abacate é acessível,
+mas vovo não. Digite exit para voltar ao shell anterior.
+
+Dito isso, você também pode ver todas as variáveis exportadas ou não, assim como funções customizadas, através do comando =set=.
+
+Esse comando tem um output imenso, que deve conter tanto abacate como vovo.
+
+Do mesmo modo que temos o set, temos o unset, usado para remover variáveis. Após realizer =unset abacate= ela deve sumir tanto do
+output de =set= como de =env= e não poderá mais ser acessada.
+
+Okay, pra recapitular, vimos aqui os segiuntes comandos:
+
++ echo => Echo (Repete o que quer que seja passado para ele na tela)
++ env => Environment (Lista as variáveis de ambiente)
++ export => Export (Exporta uma variável para o ambiente)
++ unset => Remove uma variável
++ set => Lista variáveis e funções setadas, seja de ambiente ou não
++ bash => Abre um novo shell bash, compartilhando o ambiente do shell pai
++ exit => Sai do terminal atual
+
+
+Lembrando que as variáveis são referentes ao ambiente. Se eu exportar uma variável de ambiente em um shell, matar ele com exit, e
+abrir um novo, o novo não compartilhará das variáveis exportadas anteriormente, pois são ambientes irmãos, não filhos.
+
+*** Usando aspas
+
+Algo importante no GNU/Linux é entender o uso das aspas.
+
+Aspas duplas são usadas para guardar textos como um único argumento, e elas expandem variáveis:
+=echo "Meu PATH: $PATH"=
+
+=Meu PATH: /home/familia/.krew/bin:/home/familia/.local/share/pnpm:/home/familia/perl5/bin:/snap/bin:...=
+
+=echo 'Meu PATH: $PATH"=
+
+=Meu PATH: $PATH=
+
+Podemos usar isso, por exemplo, para criar arquivos com caracteres especiais:
+
+=touch meu arquivo grande=
+
+=touch "meu arquivo grande"=
+
+=ls=
+
+Você verá que o primeiro comando criou 3 arquivos, um chamado meu, outro arquivom, e outro grande, enquanto o segundo criou 1 arquivo
+chamado meu arquivo grande.
+
+Você também pode fazer o quoting do caractere especial usando contra barras antes deles: =touch meu\ arquivo\ pequeno=.
+
+Para remover, use o comando =rm= seguido pela lista de arquivos a ser removido:
+=rm meu arquivo 'meu arquivo pequeno' grande meu\ arquivo\ grande=
+
+Vimos um novo comando:
++ rm => Remove (Remove arquivos)
+
+** Encerramento
+
+Bom, nesse tempo, vimos um pouco sobre shells e terminais, e aprendemos alguns comandos:
++ touch
++ ls
++ uname
++ pwd
++ echo
++ env
++ rm
++ set
++ unset
++ man
++ info
++ apropos
++ type
++ which
++ bash
++ export
+
+Até a próxima, quando estaremos processando fluxos de texto com filtros! Até lá, sempre bom ir brincando e testando com esses
+comandos que aprendemos até aí.
+
+#+INCLUDE: "../../templates/layout-end.org"

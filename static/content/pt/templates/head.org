@@ -1,0 +1,5 @@
+#+HTML_DOCTYPE: html5
+#+OPTIONS: html-self-link-headlines:t
+#+OPTIONS: html-style:nil html-scripts:nil
+#+HTML_CONTAINER: section
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="/styles/style.css" />

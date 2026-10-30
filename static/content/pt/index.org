@@ -1,36 +1,24 @@
-#+TITLE: Meu Blog
+#+TITLE: Heroana Blog
 #+SUBTITLE: Um espaço livre
 #+AUTHOR: Edmilson Monteiro Rodrigues Neto
+#+EMAIL: edmilson.rodriguesn38@gmail.com
+#+DESCRIPTION: Esse é o índice do meu blog, aqui se encontra alguns principais tópicos
+#+KEYWORDS: linux, free-software, devops, go, lisp, python, gitops, kubernetes, k8s
 
-#+HTML_DOCTYPE: html5
-#+OPTIONS: toc:nil author:nil date:nil timestamp:nil html5-fancy:t html-postamble:nil
+#+OPTIONS: toc:nil author:nil date:nil timestamp:nil
 
-
+#+INCLUDE: "./templates/layout-start.org"
 
 * Seja muito bem vindo ao meu blog pessoal.
 
-** Quem sou eu?
+** Conteúdos Recentes
+ 
 
-Prazer, me chamo Edmilson Rodrigues, e sou um desenvolvedor, e entusiasta de GNU Linux e software livre há pelo menos
-uns 7 anos.
+** Conteúdos Principais
 
-Sou contribuidor de software livre, tendo contribuído pra alguns repos, como snapcraft, podman-tui, craft-parts e atualmente
-criando o projeto melo-iac e a distro HeroanaOS (em desenvolvimento).
 
-Sou pãe de Lilo e Ophelia, minhas duas ratinhas amadas, casado com Maria de Sousa Morais, o amor da minha vida.
+** Posts Favoritos
 
-** O que é esse blog?
 
-Esse blog está nascendo para ser um lugar onde posso escrever uns artigos e uns cursos (em texto) para quem se interessar
-por GNU/Linux, Kubernetes, Software Livre, GitOps, talvez Python, Go, Lisp, ou a lang que eu estiver estudando no momento.
 
-Quem sabe um dia sobre outras coisas além de tecnologia. Mas, até lá, esse será o foco.
-
-Que esse seja um lugar principalmente para aprendizado, mas, também para conversas saudáveis, porque não?
-
-De qualquer modo, sejam muitos bem vindos, e aproveitem a estada.
-
-** O que NÃO é esse blog?
-
-Um lugar onde vocês poderão ler coisas de IA. Se quer saber de IA, podem ir ver o Lucas Montano, ou algo assim, muito obrigado.
-
+#+INCLUDE: "./templates/layout-end.org"

@@ -1,0 +1,24 @@
+#+TITLE: Heroana Blog
+#+SUBTITLE: Um espaço livre
+#+AUTHOR: Edmilson Monteiro Rodrigues Neto
+#+EMAIL: edmilson.rodriguesn38@gmail.com
+#+DESCRIPTION: Esse é o índice do meu blog, aqui se encontra alguns principais tópicos
+#+KEYWORDS: linux, free-software, devops, go, lisp, python, gitops, kubernetes, k8s
+
+#+OPTIONS: toc:nil author:nil date:nil timestamp:nil
+
+#+INCLUDE: "./templates/layout-start.org"
+
+* Seja muito bem vindo ao meu blog pessoal.
+
+** Conteúdos Recentes
+ 
+
+** Conteúdos Principais
+
+
+** Posts Favoritos
+
+
+
+#+INCLUDE: "./templates/layout-end.org"

@@ -1,0 +1,239 @@
+/* ==========================================================================
+   Base & Reset
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+:root {
+  --bg-color: #1e1e20;
+  --text-color: #d1d5db;
+  --heading-color: #ffffff;
+  --accent-color: #facc15;
+  --accent-hover: #fde047;
+  --border-color: #3f3f46;
+  --nav-btn-bg: transparent;
+  --nav-btn-hover: #27272a;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  font-size: 1.05rem;
+  padding: 0 1.5rem 4rem 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Header & Navigation
+   ========================================================================== */
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 3rem;
+}
+
+header h1, header h2, header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin: 0;
+}
+
+/* Nav links formatted as top bar buttons */
+header nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+header nav a {
+  color: var(--text-color);
+  text-decoration: none;
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+header nav a:hover {
+  background-color: var(--nav-btn-hover);
+  border-color: #52525b;
+  color: #fff;
+}
+
+/* ==========================================================================
+   Main Grid Layout (Article + Aside)
+   ========================================================================== */
+main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+
+/* Switch to two-column when aside is present on desktop */
+@media (min-width: 768px) {
+  main:has(aside) {
+    grid-template-columns: 3fr 1fr;
+  }
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+article {
+  display: flex;
+  flex-direction: flex-column;
+  flex: 1;
+}
+
+/* ==========================================================================
+   Typography & Content Styling
+   ========================================================================== */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading-color);
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-top: 1rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+}
+
+h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+}
+
+p {
+  margin-bottom: 1.25rem;
+}
+
+/* Links inside content (Yellow highlight like reference) */
+article a, section a, p a {
+  color: var(--accent-color);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+article a:hover, section a:hover, p a:hover {
+  color: var(--accent-hover);
+}
+
+/* Lists */
+ol, ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.6rem;
+}
+
+/* Code & Pre */
+code {
+  font-family: var(--font-mono);
+  background-color: #27272a;
+  color: #f4f4f5;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+pre {
+  background-color: #18181b;
+  padding: 1.25rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+}
+
+/* Horizontal Rule (Divider) */
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 3rem 0;
+}
+
+/* ==========================================================================
+   Aside Sidebar
+   ========================================================================== */
+aside {
+  background-color: #18181b;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  height: fit-content;
+}
+
+aside h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a1a1aa;
+}
+
+aside ul {
+  list-style: none;
+  margin-left: 0;
+}
+
+aside li {
+  margin-bottom: 0.75rem;
+}
+
+aside a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+aside a:hover {
+  color: var(--accent-color);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  font-size: 0.9rem;
+  color: #71717a;
+}

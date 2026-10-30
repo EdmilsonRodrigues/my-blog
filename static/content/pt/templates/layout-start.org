@@ -1,0 +1,5 @@
+#+INCLUDE: "./head.org"
+#+INCLUDE: "./header.org"
+#+INCLUDE: "./aside.org"
+
+#+HTML: <article>
