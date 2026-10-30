@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Introdução à linha de comando</title>
+<meta name="description" content="Uma introdução ao curso de Linux básico de GNU Linux, iniciando com um pouco de shell." />
+<meta name="keywords" content="linux, gnu, unix, shell, bash" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="/styles/style.css" />
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="https://blog.edmilsonrodrigues.net.br"> UP </a>
+ |
+ <a accesskey="H" href="https://blog.edmilsonrodrigues.net.br"> HOME </a>
+</div><header id="preamble" class="status">
+<h1>Heroana Blog</h1>
+<nav><a href="/pt/">Início</a><a href="/pt/conteudos">Conteúdos</a><a href="/pt/sobre">Sobre</a></nav>
+</header>
+<section id="content" class="content">
+<aside id="orgacc1e75">
+<p>
+This is an aside
+</p>
+
+<p>
+A huge one
+</p>
+</aside>
+
+<article>
+<section id="outline-container-org89dc181" class="outline-2">
+<h2 id="org89dc181"><span class="section-number-2">1.</span> <a href="#org89dc181">GNU Linux: Uma introdução</a></h2>
+<div class="outline-text-2" id="text-1">
+<p>
+GNU Linux é, sem sombra de dúvidas, o melhor sistema operacional já criado. Contudo, apesar de migrar de outro sistema para GNU
+Linux seja algo relativamente simples, principalmente se você não for dependente da suite da Adobe, ou algo assim, realmente
+entender o sistema é algo que nem todos precisam, mas, que pode trazer bastantes facilidades e poder.
+</p>
+
+<p>
+Bom, justamente por ter muita coisa pra ser abordada, eu decidi criar esse curso. Esse é um pequeno curso de GNU Linux, que vamos
+abordar todo o conteúdo da LPIC-1, e tentar aprofundar um pouco mais.
+</p>
+
+<p>
+Bom, mas pra esse não ser só um post pra te fazer esperar pelo próximo, vamos começar com um pouquinho de linha de comando, que é
+a parte que muita gente se assusta, mas, os shells POSIX, são uma das melhores coisas para quando se está admnistrando um sistema.
+(Não preciso nem dizer que pra acompanhar esse curso, você vai precisar estar em uma máquina Linux, seja seu computador, ou uma VM,
+mas é muito importante que seja alguma distro com interface gráfica, não uma distro de servidor, recomendo Linux Mint, ou Ubuntu
+Desktop, ou Rocky Desktop, ou, se já tiver saído, o HeroanaOS.).
+</p>
+</div>
+<div id="outline-container-org6059804" class="outline-3">
+<h3 id="org6059804"><span class="section-number-3">1.1.</span> <a href="#org6059804">Shell, Terminal, Emulador de terminal, Linha de comando</a></h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Okay, então vamos começar com um pouco de terminologia básica.
+</p>
+</div>
+<div id="outline-container-orge25be68" class="outline-4">
+<h4 id="orge25be68"><span class="section-number-4">1.1.1.</span> <a href="#orge25be68">O que é um shell?</a></h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+Shell é um programa. Um software como qualquer outro. Na verdade, mais especificamente, um shell é um interpretador.
+</p>
+
+<p>
+Você, programador, que roda seu programa com <code>node index.js</code>, por exemplo, está chamando o node (um interpretador) para interpretar
+um arquivo de texto, escrito na linguagem que aquele interpretador entende (JavaScript no exemplo).
+</p>
+
+<p>
+Um shell funciona da exata mesma forma, é um interpretador capaz de ler arquivos escritos em shell script.
+</p>
+
+<p>
+Para seguirmos, crie um arquivo (exemplo: hello-world.sh) com seu editor de textos favorito e escreva dentro o seguinte conteúdo:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><code><span style="color: #83c092;">echo</span> <span style="color: #a7c080;">"Ol&#225;, Mundo"</span>
+</code></pre>
+</div>
+
+<p>
+Em seguida, salve o arquivo, abra algum terminal ou emulador de terminal (Já iremos abordar isso, mas é a tela preta de digitar
+comandos), e rode o seguinte comando: <code>sh /caminho/até/seu/arquivo/hello-world.sh</code>.
+</p>
+
+<p>
+Ao fazer isso, você deve ver, na tela do terminal, escrito <code>Olá, Mundo</code>.
+</p>
+
+<p>
+Perfeitamente. Contudo, assim como interpretadores não conseguem somente ler arquivos, o shell também possui outra capacidade muito
+importante: Um Read Eval Print Loop (REPL).
+</p>
+
+<p>
+Assim como, se você escrever apenas: <code>node</code>, ou <code>python</code>, sem passar o nome de um arquivo, você entra no REPL desses interpretadores,
+os shells também possuem um REPL.
+</p>
+
+<p>
+E o que seria um REPL? É basicamente uma modo do interpretador em que ele vai ler linha por linha do que você escrever, avaliar e
+mostrar o resultado abaixo, de forma imediata, como se fosse um arquivo em construção, que é escrito em tempo real.
+</p>
+
+<p>
+Quando você abre o seu terminal ou emulador de terminal, ele imediatamente abre um shell para rodar dentro dele, e, nesse terminal,
+você está interagindo com o shell.
+</p>
+
+<p>
+Por isso, podemos não só ler arquivos, como também executar comandos direto do terminal, pois ele tem o REPL do shell aberto.
+</p>
+
+<p>
+No seu terminal agora, digite:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><code><span style="color: #83c092;">echo</span> <span style="color: #a7c080;">"Ol&#225;, Mundo"</span>
+</code></pre>
+</div>
+
+<p>
+Depois do enter, você deve ver escrito na tela: Olá, Mundo.
+</p>
+
+<p>
+Como podemos ver, o REPL do shell aberto no seu terminal, leu o comando que você deu, avaliou, e printou o output dele na tela.
+</p>
+
+<p>
+Quando falamos da linha de comando, normalmente nos referimos ao REPL do shell que aparece quando você abre um terminal.
+</p>
+
+<p>
+Por fim, devo dizer que estarei aqui falando apenas de Shells que seguem a especificação POSIX. Isso inclui o shell borne, o bash,
+o zsh, o dash, entre outros. Isso não inclui Fish, ou outros shells similares.
+</p>
+
+<p>
+(Se isso te deixou confuso, saiba que a maioria das distros linux vêm com dash, bash ou zsh, logo, se você não fez nada para mudar,
+você provavelmente está usando um desses, logo, não se preocupe, tudo isso vai ficar mais claro com o tempo.)
+</p>
+
+<p>
+Agora, estou há um tempo falando de terminal / emulador de terminal. O que exatamennte é isso?
+</p>
+</div>
+</div>
+<div id="outline-container-orgde00454" class="outline-4">
+<h4 id="orgde00454"><span class="section-number-4">1.1.2.</span> <a href="#orgde00454">Terminal vs Emulador de terminal</a></h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+Veremos isso de forma mais aprofundada em outro artigo, contudo, por agora, para que você não saia com muita curiosidade daqui:
+</p>
+
+<p>
+<b>Leia antes de executar, para não se desesperar.</b>
+</p>
+
+<p>
+Suponho eu que você leu o aviso, e está rodando em uma interface gráfica. Se não, entre em uma, por favor.
+</p>
+
+<p>
+Okay, se está, pressione Ctrl+Alt+F2. Nada deve acontecer. Esse costuma ser o caminho para a sua interface gráfica.
+</p>
+
+<p>
+Agora, pressione Ctrl+Alt+F3 (Para retornar, pressione Ctrl+Alt+F2).
+</p>
+
+<p>
+O que você viu, ao pressionar Ctrl+Alt+F3 foi um terminal do seu computador.
+</p>
+
+<p>
+Cada distro tem diversos terminais. Esses são conhecidos como tty (Teletypewriter). Se você fizer login nele, com seu usuário e
+senha, você pode por exemplo executar o comando <code>tty</code>.
+</p>
+
+<p>
+Você deve receber um output como: <code>/dev/tty3</code>. (Explicaremos mais sobre esse output em outro artigo).
+</p>
+
+<p>
+Esse output indica que você está em um terminal.
+</p>
+
+<p>
+Agora que você voltou para a interface gráfica, abra o terminal da sua interface gráfica e rode o mesmo comando: <code>tty</code>.
+</p>
+
+<p>
+Você deve receber um output como: <code>/dev/pts0</code>.
+</p>
+
+<p>
+Isso indica que você não está rodando em um terminal, mas sim em um Pseudo-Terminal Slave (PTS).
+</p>
+
+<p>
+Isso acontece pois o programa que roda um terminal na sua interface gráfica é, na realidade, um emulador de terminal. Ele imita o
+comportamento de um terminal real, mas ele se conecta a um Pseudo Terminal, e não a um terminal real.
+</p>
+
+<p>
+Na prática, a diferença é quase nula e, se não estivermos falando disso, usarei os termos terminal e emulador de terminal de forma
+intercambiável.
+</p>
+
+<p>
+O que um terminal faz? Ele roda um shell no modo REPL. Esse shell é onde você vai trabalhar.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org53cf6d9" class="outline-3">
+<h3 id="org53cf6d9"><span class="section-number-3">1.2.</span> <a href="#org53cf6d9">Conhecendo comandos básicos</a></h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Okay, então, dado que já sabemos que estamos rodando um shell dentro do nosso emulador de terminal, vamos começar a aprender como
+fazer coisas com ele. A partir de agora, vou considerar que você está com seu emulador de terminal aberto.
+</p>
+</div>
+<div id="outline-container-orga63b1e0" class="outline-4">
+<h4 id="orga63b1e0"><span class="section-number-4">1.2.1.</span> <a href="#orga63b1e0">Pegar informações do sistema</a></h4>
+<div class="outline-text-4" id="text-1-2-1">
+<p>
+Pra começar, podemos ver onde exatamente nós estamos dentro do seu disco pelo comando <code>pwd</code>.
+</p>
+
+<p>
+O output será algo como: <code>/home/familia</code>.
+</p>
+
+<p>
+Esse é o caminho até o diretório onde o seu shell está no momento.
+</p>
+
+<p>
+Vamos então, criar um arquivo, com <code>touch novoarquivo</code>. Se você abrir seu explorador de arquivos agora, você deve ver que esse
+arquivo foi criado dentro do diretório onde seu shell estava, e ele está vazio.
+</p>
+
+<p>
+Você também pode ver isso diretamente pelo shell, através do comando <code>ls</code>. Você deve ver todos os exatos mesmos arquivos e diretórios
+que você vê no seu explorador de arquivos, serem mostrados na tela, inclusive o arquivo novoarquivo.
+</p>
+
+<p>
+Por fim, vamos pegar algumas infos do nosso sistema com o comando <code>uname -a</code>.
+</p>
+
+<p>
+Você deve receber um output semelhante a:
+</p>
+
+<p>
+<code>Linux familia 6.12.0-211.67.1.el10_2.x86_64 #1 SMP PREEMPT_DYNAMIC Tue Oct 20 15:00:54 UTC 2026 x86_64 GNU/Linux</code>.
+</p>
+
+<p>
+Okay, vamos destrinchar melhor esse aqui.
+</p>
+
+<p>
+Primeiro, o que seria o -a? Isso é o que chamamos de flags, ou argumentos.
+</p>
+
+<p>
+São modificadores que podemos passar para um comando para alterar seu comportamento. Tente rodar somente <code>uname</code>.
+O output provavelmente será somente <code>Linux</code>.
+</p>
+
+<p>
+O resto do que foi mostrado é devido ao argumento -a (Forma curta de &ndash;all).
+</p>
+
+<p>
+Argumentos costumam ser usados com um hífem e uma letra, ou dois hífens e o nome completo.
+</p>
+
+<p>
+E o que esse output gigante significa?
+</p>
+<ul class="org-ul">
+<li>Linux
+O nome do kernel Linux.</li>
+<li>familia
+Ele diz o nome do seu usuáio</li>
+<li>6.12.0-211.67.1.el10<sub>2.x86</sub><sub>64</sub>
+Ele mostra a versão do seu Kernel</li>
+<li>#1
+É o número da build do kernel</li>
+<li>SMP
+Significa Symmetric MultiProcessing significando que esse kernel foi buildado pra um computador com mais de 1 core de CPU</li>
+<li>PREEMPT<sub>DYNAMIC</sub>
+Descreve como o sistema lida com multitasking (Não aprofundarei agora)</li>
+<li>Tue Oct 20 15:00:54 UTC 2026
+A data e hora que o Kernel foi compilado</li>
+<li>x86<sub>64</sub>
+A arquitetura de processador para a qual o sistema foi feito.</li>
+<li>GNU/Linux
+O nome do sistema operacional.</li>
+</ul>
+
+<p>
+Como você pode ver, Linux é um kernel. O sistema operacional se chama GNU/Linux, e é assim que você me verá tratando ele ao
+longo dos posts.
+</p>
+
+<p>
+Okay, então, vamos com calma. O que cada um desses 4 comandos fez?
+</p>
+
+<ul class="org-ul">
+<li>pwd =&gt; Print Work Directory</li>
+<li>ls =&gt; List</li>
+<li>touch =&gt; Touch</li>
+<li>uname =&gt; Unix Name</li>
+</ul>
+
+<p>
+O comando pwd imprimiu na tela o diretório em que você está trabalhando
+O comando ls listou na tela o que exisite nesse diretório
+O comando touch tocou um arquivo, relativo a esse diretório. Caso esse arquivo não exista, ele cria. Caso já exista, ele apenas
+altera a data da última modificação (como se literalmente cutucasse o arquivo).
+O comando uname mostra informações sobre o sistema. Ele tem outras flags, e você pode brincar com elas se quiser.
+</p>
+</div>
+</div>
+<div id="outline-container-org33ef150" class="outline-4">
+<h4 id="org33ef150"><span class="section-number-4">1.2.2.</span> <a href="#org33ef150">Pegar informações sobre um comando.</a></h4>
+<div class="outline-text-4" id="text-1-2-2">
+<p>
+Se você tem dúvidas sobre o funcionamento de um comando, você pode usar o comando man. Por exemplo, com <code>man uname</code> você vai ver
+o manual do comando uname, que flags ele acita, o que elas mostram, o autor do programa, como reportar bugs, etc.
+</p>
+
+<p>
+O comando man procura as páginas de manual do programa. Se você olhar no topo do manual, vc vai ver uname(1), indicando que está
+mostrando as páginas de manual do comando uname, que se encontram no bloco de manuais 1.
+</p>
+
+<p>
+Existem vários blocos de manual, e às vezes, os criadores de um programa podem criar mais de uma página de manual pra um programa.
+</p>
+
+<p>
+O programa uname tem páginas de manual no bloco 1 e no bloco 2. Para acessar a segunda página de manual dele, você pode usar o
+comando <code>man 2 uname</code>.
+</p>
+
+<p>
+Outro programa que pode ser usado para pegar páginas de manual é o comando info. Ele gera outro formato de visualização, que pode
+ser acessado com <code>info uname</code>. Contudo, nem todo programa tem o info, e muitas vezes, o info só aponta pras páginas de manual. O
+man vai ter a informação da maioria dos comandos.
+</p>
+
+<p>
+Agora, e se eu não lembrar o comando que eu quero executar?
+</p>
+
+<p>
+Bom, se eu sei o que esse comando faz (exemplo: mostra a versão do kernel), eu consigo fazer uma busca nas man pages, através do
+comando <code>apropos kernel</code>, por exemplo. Esse comando vai ler todas as páginas de manual, buscar pelo termo kernel, e ele vai me
+mostrar uma lista de todas as páginas de manual que contém a palavra kernel, e a primeira linha em que essa palavra aparece, em
+ordem alfabética.
+</p>
+
+<p>
+O comando <code>apropos "regular expression"</code>, por exemplo, irá fazer o mesmo, contudo para as páginas de manual com o termo regular
+expression, como os programas bzgrep, re, regex, entre outros.
+</p>
+
+<p>
+Uma outra forma de pegar info rápida sobre um comando é com o comando type.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><code>&#10140;  type uname cp kill which touch ls clear echo
+uname is /usr/bin/uname
+cp is /usr/bin/cp
+<span style="color: #83c092;">kill</span> is a shell builtin
+<span style="color: #83c092;">which</span> is an alias for alias | /usr/bin/which --tty-only --read-alias --show-tilde --show-dot
+touch is /usr/bin/touch
+ls is an alias for ls --color=tty
+clear is /home/linuxbrew/.linuxbrew/bin/clear
+<span style="color: #83c092;">echo</span> is a shell builtin
+</code></pre>
+</div>
+
+<p>
+Esse comando diz o tipo de cada comando que você passar para ele.
+</p>
+<ul class="org-ul">
+<li>uname é um programa, que se encontra em /usr/bin/uname</li>
+<li>cp é um programa, que se encontra em /usr/bin/cp</li>
+<li>kill é uma função builtin do shell.</li>
+<li>which é um alias para o comando <code>alias | /usr/bin/which --tty-only --read-alias --show-tilde --show-dot</code></li>
+<li>touch é um programa que se encontra em /usr/bin/touch</li>
+<li>ls é um alias para o comand <code>ls --color=tty</code></li>
+<li>clear é um programa que se encontra em <i>home/linuxbrew</i>.linuxbrew/bin/clear</li>
+<li>echo é uma função builtin do shell</li>
+</ul>
+
+<p>
+Como deu pra ver, um comando shell pode ter vários tipos:
+</p>
+
+<ul class="org-ul">
+<li>Programa =&gt; Significa que ele é um programa completo, seja um binário, seja um arquivo interpretável, em algum lugar no sistema,
+normalmente dentro de subpastas /bin, de binário, embora nem todos os programas lá sejam binários, programas executáveis ficam lá.
+Esses caminhos onde guardamos os executáveis se encontram na variável de ambiente $PATH. Veremos mais sobre ela logo.</li>
+<li>Funções builtin =&gt; Assim como no python temos a função print, map, no JS temos console.log, etc, o shell também possui funções
+builtin.</li>
+<li>Alias =&gt; É um apelido que damos para outro comando, para simplificar.</li>
+</ul>
+
+
+<p>
+Se eu apenas quiser saber onde é o caminho completo do programa, se for um programa, eu posso usar o comando <code>which</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><code>&#10140;  which uname which
+<span style="color: #7fbbb3;">which</span>=<span style="color: #a7c080;">'alias | /usr/bin/which --tty-only --read-alias --show-tilde --show-dot'</span>
+          /usr/bin/alias
+          /usr/bin/which
+/usr/bin/uname
+</code></pre>
+</div>
+
+<p>
+Que comandos vimos até aqui?
+</p>
+
+<ul class="org-ul">
+<li>man =&gt; Manual (Lê a página de manual de um programa)</li>
+<li>info =&gt; Information (Lê a página de informação de um program)</li>
+<li>apropos =&gt; À propos (a propósito de) (Busca nas páginas de manual por termos específicos)</li>
+<li>type =&gt; Type (Mostra o tipo do comando)</li>
+<li>which =&gt; Which (Mostra o caminho do programa)</li>
+</ul>
+
+<p>
+Rodamos muitos comandos até agora? E se eu quiser rodar de novo um comando que já rodei antes?
+</p>
+</div>
+</div>
+<div id="outline-container-orgc9645d2" class="outline-4">
+<h4 id="orgc9645d2"><span class="section-number-4">1.2.3.</span> <a href="#orgc9645d2">Usando seu histórico de comandos</a></h4>
+<div class="outline-text-4" id="text-1-2-3">
+<p>
+Você pode usar as setas pra cima e pra baixo pra rodar de novo um comando já usado anteriormente.
+</p>
+
+<p>
+Essa informação é guardada em um arquivo na home do seu usuário, pra sua shell.
+</p>
+
+<p>
+Se você usa o bash, por exemplo, será no arquivo .bash<sub>history</sub>, o zsh no .zsh<sub>history</sub>, e assim por diante.
+</p>
+
+<p>
+Apesar de você poder abrir esses arquivos para ler, você também pode rodar o comando <code>history</code>. Ele mostrará em ordem os últimos
+comandos rodados por aquela shell e usuário.
+</p>
+
+<p>
+Anteriormente, falamos sobre a variável de ambiente $PATH. Mas o que é uma variável de ambiente?
+</p>
+</div>
+</div>
+<div id="outline-container-org8a62ff6" class="outline-4">
+<h4 id="org8a62ff6"><span class="section-number-4">1.2.4.</span> <a href="#org8a62ff6">Variáveis de ambiente</a></h4>
+<div class="outline-text-4" id="text-1-2-4">
+<p>
+Todo sistema operacional possui variáveis de ambiente. Variáveis específicas de um ambiente do sistema, que podem ser usadas para
+configurações do sistema.
+</p>
+
+<p>
+A variável PATH por exemplo, guarda os caminhos para diretórios que contém programas executáveis no sistema, separados por :.
+</p>
+
+<p>
+Quando você usa um comando no shell, ele checa se é uma builtin, se não for, ele procura um alias, se não for, ele procura em cada
+diretório dentro da variável PATH, se existir, ele roda aquele programa.
+</p>
+
+<p>
+Você pode ver todas as variáveis de ambiente do seu sistema pelo comando <code>env</code>. Esse comando vai listar todas as variáveis de
+ambiente do seu ambiente shell naquele momento.
+</p>
+
+<p>
+Você pode ver apenas uma variável específica referenciando ela no echo, por exemplo: <code>echo $PATH</code>.
+</p>
+
+<p>
+Esse comando irá imprimir na tela o conteúdo da variável de ambiente PATH. Isso acontece pois o shell expande qualquer termo iniciado
+com $, procurando uma variável de ambiente com aquele nome.
+</p>
+
+<p>
+Você pode, por exemplo, fazer <code>echo $abacate</code>, e nada aparecerá. Contudo, se fizer: <code>export abacate=bonito</code>, seguido de
+<code>echo $abacate</code>, você verá escrito na tela bonito, assim como verá ela se rodar o comando env.
+</p>
+
+<p>
+Isso acontece pois você exportou a variável abacate para o ambiente. Você também pode criar a variável, sem exportá-la para o
+ambiente, com <code>vovo=jojo</code>. Ao rodar <code>echo $vovo</code> você deve ver jojo na tela, mas não verá essa entrada no <code>env</code> pois você não
+exportou ela para o ambiente.
+</p>
+
+<p>
+Inclusive, variáveis que estão no ambiente são acessíveis por subshells.
+</p>
+
+<p>
+Ao rodar <code>bash</code>. Você está criando um novo shell, que compartilha o ambiente do shell pai. Nesse novo shell, abacate é acessível,
+mas vovo não. Digite exit para voltar ao shell anterior.
+</p>
+
+<p>
+Dito isso, você também pode ver todas as variáveis exportadas ou não, assim como funções customizadas, através do comando <code>set</code>.
+</p>
+
+<p>
+Esse comando tem um output imenso, que deve conter tanto abacate como vovo.
+</p>
+
+<p>
+Do mesmo modo que temos o set, temos o unset, usado para remover variáveis. Após realizer <code>unset abacate</code> ela deve sumir tanto do
+output de <code>set</code> como de <code>env</code> e não poderá mais ser acessada.
+</p>
+
+<p>
+Okay, pra recapitular, vimos aqui os segiuntes comandos:
+</p>
+
+<ul class="org-ul">
+<li>echo =&gt; Echo (Repete o que quer que seja passado para ele na tela)</li>
+<li>env =&gt; Environment (Lista as variáveis de ambiente)</li>
+<li>export =&gt; Export (Exporta uma variável para o ambiente)</li>
+<li>unset =&gt; Remove uma variável</li>
+<li>set =&gt; Lista variáveis e funções setadas, seja de ambiente ou não</li>
+<li>bash =&gt; Abre um novo shell bash, compartilhando o ambiente do shell pai</li>
+<li>exit =&gt; Sai do terminal atual</li>
+</ul>
+
+
+<p>
+Lembrando que as variáveis são referentes ao ambiente. Se eu exportar uma variável de ambiente em um shell, matar ele com exit, e
+abrir um novo, o novo não compartilhará das variáveis exportadas anteriormente, pois são ambientes irmãos, não filhos.
+</p>
+</div>
+</div>
+<div id="outline-container-orgb1301cd" class="outline-4">
+<h4 id="orgb1301cd"><span class="section-number-4">1.2.5.</span> <a href="#orgb1301cd">Usando aspas</a></h4>
+<div class="outline-text-4" id="text-1-2-5">
+<p>
+Algo importante no GNU/Linux é entender o uso das aspas.
+</p>
+
+<p>
+Aspas duplas são usadas para guardar textos como um único argumento, e elas expandem variáveis:
+<code>echo "Meu PATH: $PATH"</code>
+</p>
+
+<p>
+<code>Meu PATH: /home/familia/.krew/bin:/home/familia/.local/share/pnpm:/home/familia/perl5/bin:/snap/bin:...</code>
+</p>
+
+<p>
+<code>echo 'Meu PATH: $PATH"</code>
+</p>
+
+<p>
+<code>Meu PATH: $PATH</code>
+</p>
+
+<p>
+Podemos usar isso, por exemplo, para criar arquivos com caracteres especiais:
+</p>
+
+<p>
+<code>touch meu arquivo grande</code>
+</p>
+
+<p>
+<code>touch "meu arquivo grande"</code>
+</p>
+
+<p>
+<code>ls</code>
+</p>
+
+<p>
+Você verá que o primeiro comando criou 3 arquivos, um chamado meu, outro arquivom, e outro grande, enquanto o segundo criou 1 arquivo
+chamado meu arquivo grande.
+</p>
+
+<p>
+Você também pode fazer o quoting do caractere especial usando contra barras antes deles: <code>touch meu\ arquivo\ pequeno</code>.
+</p>
+
+<p>
+Para remover, use o comando <code>rm</code> seguido pela lista de arquivos a ser removido:
+<code>rm meu arquivo 'meu arquivo pequeno' grande meu\ arquivo\ grande</code>
+</p>
+
+<p>
+Vimos um novo comando:
+</p>
+<ul class="org-ul">
+<li>rm =&gt; Remove (Remove arquivos)</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org452d101" class="outline-3">
+<h3 id="org452d101"><span class="section-number-3">1.3.</span> <a href="#org452d101">Encerramento</a></h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+Bom, nesse tempo, vimos um pouco sobre shells e terminais, e aprendemos alguns comandos:
+</p>
+<ul class="org-ul">
+<li>touch</li>
+<li>ls</li>
+<li>uname</li>
+<li>pwd</li>
+<li>echo</li>
+<li>env</li>
+<li>rm</li>
+<li>set</li>
+<li>unset</li>
+<li>man</li>
+<li>info</li>
+<li>apropos</li>
+<li>type</li>
+<li>which</li>
+<li>bash</li>
+<li>export</li>
+</ul>
+
+<p>
+Até a próxima, quando estaremos processando fluxos de texto com filtros! Até lá, sempre bom ir brincando e testando com esses
+comandos que aprendemos até aí.
+</p>
+
+</article>
+</div>
+</div>
+</section>
+</section>
+</body>
+</html>

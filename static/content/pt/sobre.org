@@ -38,5 +38,3 @@ Um lugar onde vocês poderão ler coisas de IA. Se quer saber de IA, podem ir ve
 
 
 #+INCLUDE: "./templates/layout-end.org"
-
-

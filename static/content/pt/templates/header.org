@@ -1,5 +1,5 @@
 #+OPTIONS: html-preamble:"<h1>Heroana Blog</h1>"
-#+OPTIONS: html-preamble:"<h1>Heroana Blog</h1>\n<nav><a href=\"/pt/\">Início</a><a href=\"/pt/conteúdos\">Conteúdos</a><a href=\"/pt/sobre\">Sobre</a></nav>"
+#+OPTIONS: html-preamble:"<h1>Heroana Blog</h1>\n<nav><a href=\"/pt/\">Início</a><a href=\"/pt/conteudos\">Conteúdos</a><a href=\"/pt/sobre\">Sobre</a></nav>"
 
 #+HTML_LINK_HOME: https://blog.edmilsonrodrigues.net.br
 #+HTML_LINK_UP: https://blog.edmilsonrodrigues.net.br
