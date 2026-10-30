@@ -1,12 +1,11 @@
 /* ==========================================================================
    Base & Reset
    ========================================================================== */
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-
 
 :root {
   --bg-color: #1e1e20;
@@ -21,7 +20,6 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
@@ -29,7 +27,7 @@ body {
   line-height: 1.7;
   font-size: 1.05rem;
   padding: 0 1.5rem 4rem 1.5rem;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -43,17 +41,16 @@ header {
   justify-content: space-between;
   padding: 1.5rem 0;
   border-bottom: 1px solid var(--border-color);
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
 
-header h1, header h2, header h3 {
-  font-size: 1.25rem;
+header h1 {
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--heading-color);
   margin: 0;
 }
 
-/* Nav links formatted as top bar buttons */
 header nav {
   display: flex;
   gap: 0.5rem;
@@ -77,31 +74,78 @@ header nav a:hover {
 }
 
 /* ==========================================================================
-   Main Grid Layout (Article + Aside)
+   Main Layout (Sidebar + Content Grid)
    ========================================================================== */
+/* Garante que o container principal coloque o conteúdo e o aside lado a lado no desktop */
 main {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 3rem;
+  gap: 2.5rem;
+  align-items: start;
 }
 
-/* Switch to two-column when aside is present on desktop */
 @media (min-width: 768px) {
-  main:has(aside) {
-    grid-template-columns: 3fr 1fr;
+  /* Se houver um aside, dividimos em colunas fixas: Conteúdo principal (3fr) e Aside (1fr) */
+  main {
+    grid-template-columns: 1fr 280px;
   }
 }
 
-section {
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
+/* Agrupador de seções e artigos */
+section, article {
+  display: block;
+  width: 100%;
 }
 
-article {
-  display: flex;
-  flex-direction: flex-column;
-  flex: 1;
+/* ==========================================================================
+   Aside Sidebar (Fixada na Lateral)
+   ========================================================================== */
+aside {
+  background-color: #18181b;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+@media (min-width: 768px) {
+  aside {
+    grid-column: 2;
+    grid-row: 1 / span 10;
+    position: sticky;
+    top: 2rem;
+  }
+  
+  /* Faz o conteúdo principal ocupar a primeira coluna quando o aside existir */
+  section, article {
+    grid-column: 1;
+  }
+}
+
+aside h3, aside h1, aside h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a1a1aa;
+  margin-bottom: 1rem;
+}
+
+aside ul {
+  list-style: none;
+  margin-left: 0;
+}
+
+aside li {
+  margin-bottom: 0.75rem;
+}
+
+aside a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+aside a:hover {
+  color: var(--accent-color);
 }
 
 /* ==========================================================================
@@ -114,20 +158,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 800;
   margin-top: 1rem;
 }
 
 h2 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin-top: 2rem;
-  padding-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 h3 {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 600;
   margin-top: 1.5rem;
 }
@@ -136,7 +181,7 @@ p {
   margin-bottom: 1.25rem;
 }
 
-/* Links inside content (Yellow highlight like reference) */
+/* Links internos do post com destaque em amarelo */
 article a, section a, p a {
   color: var(--accent-color);
   text-decoration: underline;
@@ -148,14 +193,14 @@ article a:hover, section a:hover, p a:hover {
   color: var(--accent-hover);
 }
 
-/* Lists */
+/* Listas */
 ol, ul {
   margin-left: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
 li {
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 
 /* Code & Pre */
@@ -182,7 +227,7 @@ pre code {
   padding: 0;
 }
 
-/* Horizontal Rule (Divider) */
+/* Linha divisória */
 hr {
   border: none;
   border-top: 1px solid var(--border-color);
@@ -190,46 +235,10 @@ hr {
 }
 
 /* ==========================================================================
-   Aside Sidebar
-   ========================================================================== */
-aside {
-  background-color: #18181b;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  height: fit-content;
-}
-
-aside h3 {
-  margin-top: 0;
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #a1a1aa;
-}
-
-aside ul {
-  list-style: none;
-  margin-left: 0;
-}
-
-aside li {
-  margin-bottom: 0.75rem;
-}
-
-aside a {
-  color: var(--text-color);
-  text-decoration: none;
-}
-
-aside a:hover {
-  color: var(--accent-color);
-}
-
-/* ==========================================================================
    Footer
    ========================================================================== */
 footer {
+  grid-column: 1 / -1;
   margin-top: 4rem;
   padding-top: 2rem;
   border-top: 1px solid var(--border-color);
