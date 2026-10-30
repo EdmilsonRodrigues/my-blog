@@ -2,4 +2,4 @@
 #+OPTIONS: html-self-link-headlines:t
 #+OPTIONS: html-style:nil html-scripts:nil
 #+HTML_CONTAINER: section
-#+HTML_HEAD: <link rel="stylesheet" type="style/css" href="/styles/style.css" />
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="/styles/style.css" />
