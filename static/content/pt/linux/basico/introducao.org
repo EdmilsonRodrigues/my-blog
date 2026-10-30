@@ -375,5 +375,4 @@ Bom, nesse tempo, vimos um pouco sobre shells e terminais, e aprendemos alguns c
 Até a próxima, quando estaremos processando fluxos de texto com filtros! Até lá, sempre bom ir brincando e testando com esses
 comandos que aprendemos até aí.
 
-
 #+INCLUDE: "../../templates/layout-end.org"

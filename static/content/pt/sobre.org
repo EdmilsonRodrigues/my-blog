@@ -36,5 +36,4 @@ De qualquer modo, sejam muitos bem vindos, e aproveitem a estada.
 
 Um lugar onde vocês poderão ler coisas de IA. Se quer saber de IA, podem ir ver o Lucas Montano, ou algo assim, muito obrigado.
 
-
 #+INCLUDE: "./templates/layout-end.org"
