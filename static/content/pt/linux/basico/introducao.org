@@ -6,6 +6,7 @@
 #+DESCRIPTION: Uma introdução ao curso de Linux básico de GNU Linux, iniciando com um pouco de shell.
 #+KEYWORDS: linux, gnu, unix, shell, bash
 #+INDEX: Linux!Básico!Introdução á Linha de Comando
+#+HTML_LINK_UP: /pt/linux/basico/
 
 #+OPTIONS: toc:nil author:nil date:nil timestamp:nil
 
