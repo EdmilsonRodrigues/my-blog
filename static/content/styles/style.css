@@ -26,14 +26,13 @@ body {
   font-family: var(--font-sans);
   line-height: 1.7;
   font-size: 1.05rem;
-  padding: 1.5rem 1.5rem 1.5rem 1.5rem; /* Reduzido de 3rem para 1.5rem embaixo */
+  padding: 1.5rem;
   max-width: 1100px;
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
-
 
 /* ==========================================================================
    UP / HOME Navigation Bar (Org Mode Top Link)
@@ -106,9 +105,8 @@ section#content.content {
   grid-template-columns: 1fr;
   gap: 2.5rem;
   align-items: start;
-  flex: 1; /* Faz o conteúdo preencher o espaço, mas sem exageros */
+  flex: 1; /* Faz o conteúdo ocupar o espaço, mantendo o footer ancorado embaixo */
 }
-
 
 @media (min-width: 768px) {
   section#content.content {
@@ -117,14 +115,14 @@ section#content.content {
 
   section#content.content > aside {
     grid-column: 2;
-    grid-row: 1 / span 100;
+    grid-row: 1; /* Mantém estritamente na primeira linha, evitando esticar a página */
     position: sticky;
     top: 2rem;
   }
 
   section#content.content > article {
     grid-column: 1;
-    grid-row: 1 / span 100;
+    grid-row: 1;
   }
 }
 
