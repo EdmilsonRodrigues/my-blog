@@ -1,0 +1,206 @@
+#+TITLE: Introdução à Manipulação de Texto: Parte 1
+#+SUBTITLE: Aprendendo a manipular texto
+#+AUTHOR: Edmilson Monteiro Rodrigues Neto
+#+EMAIL: edmilson.rodriguesn38@gmail.com
+#+DATE: <2026-10-31 Sat>
+#+DESCRIPTION: Uma introdução à manipulação de texto em sistemas UNIX.
+#+KEYWORDS: linux, gnu, unix, shell, bash, grep, sed, awk, pipes
+#+INDEX: Linux!Básico!Introdução á Manipulação de Texto: Parte 1
+#+HTML_LINK_UP: /pt/linux/basico/introducao.org
+
+#+INCLUDE: "../../templates/layout-start.org"
+
+* Usar Streams, Pipes e Redirecionamentos
+
+Bom, no post anterior a gente conheceu alguns comandos básicos. Uma coisa que esses comandos geraram pra gente, na maioria do caso,
+foram textos escritos no terminal. Os textos que vimos foram os outputs dos comandos, e uma parte significativa do trabalho de um
+admnistrador de sistemas GNU Linux é entender como trabalhar com esses outputs de texto. Para isso, nós usamos de ferramentas e
+técnicas como fluxos, pipes e redirecionamentos.
+
+Embora eu prefira usar os termos em português, fluxo e cano não costumam ser termos muito utlizados para se referir à shell, portanto
+às vezes usarei stream, às vezes fluxo, mas sempre usarei pipe, nunca cano.
+
+Bom, vamos começar com o básico. Todo sistema operacional tem 3 locais, por padrão, por onde texto flui. O primeiro é a entrada padrão,
+normalmente, o teclado, a segunda é a saída padrão, normalmente, o monitor, e a terceira é o erro padrão, normalmente, também o monitor.
+
+A entrada padrão é por onde o sistema recebe dados. A saída padrão é pra onde o sistema manda os dados. O erro padrão é pra onde o
+sistema manda as mensagens de erro.
+
+Em um sistema GNU Linux, esses 3 estão respectivamente em =/dev/stdin=, =/dev/stdout=, =/dev/stderr=.
+
+Eles também possuem file descriptors para esses 3 canais, respectivamente 0, 1 e 2.
+
+Esses 3 dão a possibilidade dos desenvolvedores de criar programas sem se preocupar com de onde os dados vêm ou para onde vão. É daí
+que vêm os dados de quando você chama a função "input" no python, por exemplo, da mesma forma pra onde os dados vão após a função
+"print".
+
+O shell tem a habilidade de mudar para onde o output de um programa vai ser direcionado, redirecionando de um programa para um arquivo,
+por exemplo, ao invés de uma tela.
+
+** Redirecionamentos
+
+O redirecionamento do file descriptor de um canal em um ambiente shell é definido pelos sinais < e >.
+
+Você pode ter diferentes tipos de redirecionamento, e iremos ver todos aqui:
+
+*** Redirecinamento de Output
+
+Podemos redirecionar o nosso output de 3 formas em sistemas GNU Linux.
+
+Vamos usar como exemplo aqui a leitura do arquivo =/proc/cpuinfo=, que pode ser feita pelo comando =cat /proc/cpuinfo=.
+
+Todo redirecionamento de output usa o file descriptor 1 (stdout) como padrão.
+
++ >: Redirecionamento com sobrescrita:
+  Se eu usar por exemplo o comando:
+  =cat /proc/cpuinfo > /tmp/cpu.txt=
+  Eu estarei redirecionando o output do comando =cat /proc/cpuinfo= para o arquivo =/tmp/cpu.txt=, criando ele se não existir ou
+  sobrescrevendo seu conteúdo caso já exista.
+
+  Esse comando é equivalente a:
+
+  =cat /proc/cpuinfo 1> /tmp/cpu.txt=
+
+  Mas e se eu não quiser redirecionar o file descriptor 1 (stdout), mas sim o 2 (stderr)?
+
+  Você pode usar o seguinte comando:
+
+  =cat /proc/cpu_info 2> /tmp/error.txt=
+  Ao rodar isso, você recebeu um erro, pois o arquivo que foi tentado ser lido não existe.
+
+  O erro pode ser visto com:
+  =cat /tmp/error.txt=
+
+  E se, caso aquele comando gere qualquer output, isso seja um erro no seu programa?
+  Você pode redirecionar um file descriptor para o outro, por exemplo:
+  =cat /tmp/cpuinfo >&2 2> /tmp/error2.txt=
+
+  Rodando esse comando vc verá o mesmo output de =/tmp/cpu.txt=. Isso é porque o trecho =>&2= está redirecionando o output do file
+  descriptor 1 (stdout) pro file descriptor 2 (stderr) e, em seguida, apontando do file descriptor 2 com =2>= para o arquivo
+  =/tmp/error2.txt=.
+
+  Você tambêm pode fazer o mesmo, ao inverso, caso queira que erros sejam tratados como output comum (para tratamento de logs de
+  erro, por exemplo):
+  =cat /tmp/cpu_info 2>&1 > /tmp/cpu3.txt=
+
+  Contudo, se você quer enviar ambos file descriptor 1 e 2 para o mesmo arquivo, é melhor usar outra possível syntax, que já manda
+  ambos para o mesmo lugar:
+  =cat /tmp/cpuinfo /tmp/cpu_info &> /tmp/cpu4.txt=
+
+  Existe também um outro arquivo muito usado =/dev/null=. Ele é uma lixeira, e costuma ser usada quando você quer ignorar algum output:
+  - =cat /tmp/cpuinfo /tmp/cpu_info > /tmp/cpu5.txt 2> /dev/null=.  Ignora os erros.
+  - =cat /tmp/cpuinfo /tmp/cpu_info 2> /tmp/error5.txt > /dev/null=.  Ignora o output padrão.
+
++ >>: Redirecionamento com append
+  Seguindo a exata mesma lógica do outro, contudo, usando >> ao invés de sobrescrever um arquivo, você redireciona o output para ser
+  adicionado no final do arquivo.
+
+  Rode esse comando 2 vezes para ver o resultado:
+  =cat /tmp/cpuinfo /tmp/cpu_info 2> /tmp/error6.txt > /tmp/cpu6.txt=
+
++ |: Redirecionamento de Pipe
+  Esse é o que a gente mais usa. Esse símbolo é usado para redirecionar o output do file descriptor 1 (stdout) de um comando para outro.
+
+  Por exemplo:
+  =cat /proc/cpuinfo | wc=
+
+  Isso redireciona o conteúdo do arquivo =/proc/cpuinfo= para o comando =wc= (word count), mostrando o número de linhas, seguido pelo de
+  palavras, e pelo de caracteres no final.
+
+  Mas e se houver um erro?
+  =cat /proc/cpu_info | wc=
+
+  Você provavelmente vai ver o erro, e uma wourd count de 0. Isso acontece pois o erro foi direcionado para o file descriptor 2, e o pipe
+  lê do file descriptor 1.
+
+  Logo, para que o erro seja passado pela pipe, você deve redirecionar o output do file descriptor 2 para o do 1:
+  =cat /proc/cpu_info 2>&1 | wc=
+
+*** Redirecionamento de input
+
+Bom, vimos como ficar redirecionando output, seja de erro, seja padrão e inclusive como passar via pipe entre comandos.
+
+Mas e input?
+
+Bom, para input nós usamos o símbolo <. E, assim como o padrão do redirecionamento de saída é apontar para o file descriptor 1, o de entrada é
+apontar para o file descriptor 0, logo 0< e < são intercambiáveis.
+
+Enfim, existem 4 tipos de redirecionamento de input:
+
++ <: Redirecionamento padrão:
+  Pega o conteúdo do arquivo como input.
+
+  Por exemplo, posso fazer algo como:
+  =wc < /proc/cpuinfo=
+
+  Isso faz exatamente o mesmo que:
+  =cat /proc/cpuinfo | wc=
+
++ <<: Here String:
+  Isso serve para quando você quer criar um texto manualmente.
+  Você define um conjunto de caracteres para encerrar o arquivo, e depois passa para o comando.
+
+  Exemplo:
+  #+BEGIN_SRC shell
+    wc <<ABACATADA
+    Esse é um texto
+    Com 4 linhas
+    12 palavras
+    e 59 caracteres.
+    ABACATADA
+  #+END_SRC
+
+  O mais comum é usar EOF como fim do arquivo, mas qualquer coisa pode ser usada.
+
++ <<<: Here string:
+  Isso serve para quando você quer passar apenas uma string curta para um comando:
+  =wc <<<"Essa é uma string com 1 linha, 12 palavras e 60 caracters."=
+
+  Contudo, Here strings não funcionam em todos os shells disponíveis. Funcionam em bash, em zsh
+  com certeza, mas não fazem parte da especificação posix, logo, se estiver em um sistema que não
+  as suporte, você pode também fazer algo como:
+  =echo "Essa é uma string com 1 linha, 12 palavras e 60 caracters." | wc=
+
++ <(): Execução de subshell:
+  Isso na realidade não é um redirecionamento de input. Pelo contrário, isso serve para pegar o
+  output de um camando e criar um arquivo temporário com ele. Isso pode ser usado para passar algo
+  para programas que só aceitam arquivos, mas não aceitam nada no stdin:
+
+  =diff <(echo "Essa é uma string com 1 linha, 12 palavras e 60 caracters." | wc) <(wc <<<"Essa é uma string com 1 linha, 12 palavras e 60 caracters.")=
+
+  Esse comando mostraria a diferença entre 2 arquivos, um gerado pelo output do primeiro e uma pelo do segundo comando.
+
+  Isso também só existe em alguns shells, como bash e zsh, logo, se não tiver um desses disponível, isso não funcionará.
+
+** Outros File Descriptors
+
+Vimos os file descriptors 0, 1 e 2. Contudo, podemos ter quantos file descriptors nós quisermos, e trabalhar com eles ao invés dos padrões, por qualquer
+motivo que seja, por exemplo:
+
+#+BEGIN_SRC shell
+  ➜  sh -c '
+  read -u 3 -r line
+  echo $line >&4
+  ' 3< /proc/cpuinfo 4>&1 | wc
+  1       3      14
+#+END_SRC
+
+Esse comando executa um script que lê 1 linha do file descriptor 3, e imprime ela no file descriptor 4.
+O input do file descriptor 3 é populado pelo conteúdo do arquivo /proc/cpuinfo e o output do file
+descriptor 4 é redirecionado para o file descriptor 1, e então pipeado para o comando =wc=.
+
+* Encerramento
+
+Nesse artigo vimos um básico sobre file descriptors e redirecionamentos de entrada e saída, assim como como usar pipes e manipular streams de texto.
+
+No próximo veremos sobre ferramentas de manipulação de texto.
+
+Comandos vistos até aqui:
++ cat => Concatenate (Lê vários arquivos passados e imprime eles no stdout)
++ wc => Word Count (Conta linhas, palavras e caracteres dos arquivos passados ou conteúdo do standard input)
++ diff => Mostra a difereça entre os arquivos passados.
++ read => Lê uma linha de um file descriptor e passa para uma variável no programa.
+
+Até a próxima.
+
+#+INCLUDE: "../../templates/layout-end.org"

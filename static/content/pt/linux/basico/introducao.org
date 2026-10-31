@@ -8,8 +8,6 @@
 #+INDEX: Linux!Básico!Introdução á Linha de Comando
 #+HTML_LINK_UP: /pt/linux/basico/
 
-#+OPTIONS: toc:nil author:nil date:nil timestamp:nil
-
 #+INCLUDE: "../../templates/layout-start.org"
 
 * Shell, Terminal, Emulador de terminal, Linha de comando

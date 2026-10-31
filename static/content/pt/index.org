@@ -17,6 +17,7 @@
 
 + [[./linux/basico/introducao.org][Introdução à Linha de Comando]]
 + [[./linux/basico/][Introdução ao GNU Linux]]
++ [[./linux/basico/textos-01.org][Introdução à Manipulação de Texto: Parte 1]]
 
 ** Conteúdos Principais
 
@@ -25,5 +26,6 @@
 ** Posts Favoritos
 
 + [[./linux/basico/introducao.org][Introdução à Linha de Comando]]
++ [[./linux/basico/textos-01.org][Introdução à Manipulação de Texto: Parte 1]]
 
 #+INCLUDE: "./templates/layout-end.org"

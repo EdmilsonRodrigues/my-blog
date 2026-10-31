@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- 2026-10-31 Sat 10:03 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Introdução à linha de comando</title>
+<meta name="author" content="Edmilson Monteiro Rodrigues Neto" />
 <meta name="description" content="Uma introdução ao curso de Linux básico de GNU Linux, iniciando com um pouco de shell." />
 <meta name="keywords" content="linux, gnu, unix, shell, bash" />
 <meta name="generator" content="Org Mode" />
@@ -19,7 +21,30 @@
 <nav><a href="/pt/">Início</a><a href="/pt/conteudos.html">Conteúdos</a><a href="/pt/sobre.html">Sobre</a></nav>
 </header>
 <section id="content" class="content">
-<aside id="org7f2f014">
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org6b4d820">1. Shell, Terminal, Emulador de terminal, Linha de comando</a>
+<ul>
+<li><a href="#org73a1897">1.1. O que é um shell?</a></li>
+<li><a href="#orge113d46">1.2. Terminal vs Emulador de terminal</a></li>
+</ul>
+</li>
+<li><a href="#org886eef3">2. Conhecendo comandos básicos</a>
+<ul>
+<li><a href="#orgb3bdc81">2.1. Pegar informações do sistema</a></li>
+<li><a href="#orgc10ff18">2.2. Pegar informações sobre um comando.</a></li>
+<li><a href="#org8dd4bdd">2.3. Usando seu histórico de comandos</a></li>
+<li><a href="#org872f3cf">2.4. Variáveis de ambiente</a></li>
+<li><a href="#org453c2d8">2.5. Usando aspas</a></li>
+</ul>
+</li>
+<li><a href="#org70cb134">3. Encerramento</a></li>
+</ul>
+</div>
+</nav>
+<aside id="org705f0e3">
 <p>
 
 </p>
@@ -34,15 +59,15 @@ Principais conteúdos
 </aside>
 
 <article>
-<section id="outline-container-orga791f77" class="outline-2">
-<h2 id="orga791f77"><span class="section-number-2">1.</span> <a href="#orga791f77">Shell, Terminal, Emulador de terminal, Linha de comando</a></h2>
+<section id="outline-container-org6b4d820" class="outline-2">
+<h2 id="org6b4d820"><span class="section-number-2">1.</span> <a href="#org6b4d820">Shell, Terminal, Emulador de terminal, Linha de comando</a></h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Okay, então vamos começar com um pouco de terminologia básica.
 </p>
 </div>
-<div id="outline-container-org8f0ec0a" class="outline-3">
-<h3 id="org8f0ec0a"><span class="section-number-3">1.1.</span> <a href="#org8f0ec0a">O que é um shell?</a></h3>
+<div id="outline-container-org73a1897" class="outline-3">
+<h3 id="org73a1897"><span class="section-number-3">1.1.</span> <a href="#org73a1897">O que é um shell?</a></h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 Shell é um programa. Um software como qualquer outro. Na verdade, mais especificamente, um shell é um interpretador.
@@ -135,8 +160,8 @@ Agora, estou há um tempo falando de terminal / emulador de terminal. O que exat
 </p>
 </div>
 </div>
-<div id="outline-container-orgde7b05e" class="outline-3">
-<h3 id="orgde7b05e"><span class="section-number-3">1.2.</span> <a href="#orgde7b05e">Terminal vs Emulador de terminal</a></h3>
+<div id="outline-container-orge113d46" class="outline-3">
+<h3 id="orge113d46"><span class="section-number-3">1.2.</span> <a href="#orge113d46">Terminal vs Emulador de terminal</a></h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 Veremos isso de forma mais aprofundada em outro artigo, contudo, por agora, para que você não saia com muita curiosidade daqui:
@@ -203,16 +228,16 @@ O que um terminal faz? Ele roda um shell no modo REPL. Esse shell é onde você 
 </div>
 </div>
 </section>
-<section id="outline-container-org63f1756" class="outline-2">
-<h2 id="org63f1756"><span class="section-number-2">2.</span> <a href="#org63f1756">Conhecendo comandos básicos</a></h2>
+<section id="outline-container-org886eef3" class="outline-2">
+<h2 id="org886eef3"><span class="section-number-2">2.</span> <a href="#org886eef3">Conhecendo comandos básicos</a></h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Okay, então, dado que já sabemos que estamos rodando um shell dentro do nosso emulador de terminal, vamos começar a aprender como
 fazer coisas com ele. A partir de agora, vou considerar que você está com seu emulador de terminal aberto.
 </p>
 </div>
-<div id="outline-container-org2bd4e54" class="outline-3">
-<h3 id="org2bd4e54"><span class="section-number-3">2.1.</span> <a href="#org2bd4e54">Pegar informações do sistema</a></h3>
+<div id="outline-container-orgb3bdc81" class="outline-3">
+<h3 id="orgb3bdc81"><span class="section-number-3">2.1.</span> <a href="#orgb3bdc81">Pegar informações do sistema</a></h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 Pra começar, podemos ver onde exatamente nós estamos dentro do seu disco pelo comando <code>pwd</code>.
@@ -318,8 +343,8 @@ O comando uname mostra informações sobre o sistema. Ele tem outras flags, e vo
 </p>
 </div>
 </div>
-<div id="outline-container-org3cb6224" class="outline-3">
-<h3 id="org3cb6224"><span class="section-number-3">2.2.</span> <a href="#org3cb6224">Pegar informações sobre um comando.</a></h3>
+<div id="outline-container-orgc10ff18" class="outline-3">
+<h3 id="orgc10ff18"><span class="section-number-3">2.2.</span> <a href="#orgc10ff18">Pegar informações sobre um comando.</a></h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 Se você tem dúvidas sobre o funcionamento de um comando, você pode usar o comando man. Por exemplo, com <code>man uname</code> você vai ver
@@ -437,8 +462,8 @@ Rodamos muitos comandos até agora? E se eu quiser rodar de novo um comando que 
 </p>
 </div>
 </div>
-<div id="outline-container-org67a80a7" class="outline-3">
-<h3 id="org67a80a7"><span class="section-number-3">2.3.</span> <a href="#org67a80a7">Usando seu histórico de comandos</a></h3>
+<div id="outline-container-org8dd4bdd" class="outline-3">
+<h3 id="org8dd4bdd"><span class="section-number-3">2.3.</span> <a href="#org8dd4bdd">Usando seu histórico de comandos</a></h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 Você pode usar as setas pra cima e pra baixo pra rodar de novo um comando já usado anteriormente.
@@ -462,8 +487,8 @@ Anteriormente, falamos sobre a variável de ambiente $PATH. Mas o que é uma var
 </p>
 </div>
 </div>
-<div id="outline-container-org1e01c0a" class="outline-3">
-<h3 id="org1e01c0a"><span class="section-number-3">2.4.</span> <a href="#org1e01c0a">Variáveis de ambiente</a></h3>
+<div id="outline-container-org872f3cf" class="outline-3">
+<h3 id="org872f3cf"><span class="section-number-3">2.4.</span> <a href="#org872f3cf">Variáveis de ambiente</a></h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 Todo sistema operacional possui variáveis de ambiente. Variáveis específicas de um ambiente do sistema, que podem ser usadas para
@@ -547,8 +572,8 @@ abrir um novo, o novo não compartilhará das variáveis exportadas anteriorment
 </p>
 </div>
 </div>
-<div id="outline-container-org0e6660f" class="outline-3">
-<h3 id="org0e6660f"><span class="section-number-3">2.5.</span> <a href="#org0e6660f">Usando aspas</a></h3>
+<div id="outline-container-org453c2d8" class="outline-3">
+<h3 id="org453c2d8"><span class="section-number-3">2.5.</span> <a href="#org453c2d8">Usando aspas</a></h3>
 <div class="outline-text-3" id="text-2-5">
 <p>
 Algo importante no GNU/Linux é entender o uso das aspas.
@@ -610,8 +635,8 @@ Vimos um novo comando:
 </div>
 </div>
 </section>
-<section id="outline-container-orga946b31" class="outline-2">
-<h2 id="orga946b31"><span class="section-number-2">3.</span> <a href="#orga946b31">Encerramento</a></h2>
+<section id="outline-container-org70cb134" class="outline-2">
+<h2 id="org70cb134"><span class="section-number-2">3.</span> <a href="#org70cb134">Encerramento</a></h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Bom, nesse tempo, vimos um pouco sobre shells e terminais, e aprendemos alguns comandos:

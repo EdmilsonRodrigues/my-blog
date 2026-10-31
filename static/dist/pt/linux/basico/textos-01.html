@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2026-10-31 Sat 10:03 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Introdução à Manipulação de Texto: Parte 1</title>
+<meta name="author" content="Edmilson Monteiro Rodrigues Neto" />
+<meta name="description" content="Uma introdução à manipulação de texto em sistemas UNIX." />
+<meta name="keywords" content="linux, gnu, unix, shell, bash, grep, sed, awk, pipes" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="/styles/style.css" />
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/pt/linux/basico/introducao.org"> UP </a>
+ |
+ <a accesskey="H" href="/pt"> HOME </a>
+</div><header id="preamble" class="status">
+<h1>Heroana Blog</h1>
+<nav><a href="/pt/">Início</a><a href="/pt/conteudos.html">Conteúdos</a><a href="/pt/sobre.html">Sobre</a></nav>
+</header>
+<section id="content" class="content">
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgec011ca">1. Usar Streams, Pipes e Redirecionamentos</a>
+<ul>
+<li><a href="#orge5e94c8">1.1. Redirecionamentos</a>
+<ul>
+<li><a href="#org4a2447f">1.1.1. Redirecinamento de Output</a></li>
+<li><a href="#org75eb707">1.1.2. Redirecionamento de input</a></li>
+</ul>
+</li>
+<li><a href="#org8ffa0af">1.2. Outros File Descriptors</a></li>
+</ul>
+</li>
+<li><a href="#org8440bfa">2. Encerramento</a></li>
+</ul>
+</div>
+</nav>
+<aside id="org24f406c">
+<p>
+
+</p>
+
+<p>
+Principais conteúdos
+</p>
+
+<ul class="org-ul">
+<li><a href="https://blog.edmilsonrodrigues.net.br/pt/linux/basico/">Introdução ao GNU Linux</a></li>
+</ul>
+</aside>
+
+<article>
+<section id="outline-container-orgec011ca" class="outline-2">
+<h2 id="orgec011ca"><span class="section-number-2">1.</span> <a href="#orgec011ca">Usar Streams, Pipes e Redirecionamentos</a></h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Bom, no post anterior a gente conheceu alguns comandos básicos. Uma coisa que esses comandos geraram pra gente, na maioria do caso,
+foram textos escritos no terminal. Os textos que vimos foram os outputs dos comandos, e uma parte significativa do trabalho de um
+admnistrador de sistemas GNU Linux é entender como trabalhar com esses outputs de texto. Para isso, nós usamos de ferramentas e
+técnicas como fluxos, pipes e redirecionamentos.
+</p>
+
+<p>
+Embora eu prefira usar os termos em português, fluxo e cano não costumam ser termos muito utlizados para se referir à shell, portanto
+às vezes usarei stream, às vezes fluxo, mas sempre usarei pipe, nunca cano.
+</p>
+
+<p>
+Bom, vamos começar com o básico. Todo sistema operacional tem 3 locais, por padrão, por onde texto flui. O primeiro é a entrada padrão,
+normalmente, o teclado, a segunda é a saída padrão, normalmente, o monitor, e a terceira é o erro padrão, normalmente, também o monitor.
+</p>
+
+<p>
+A entrada padrão é por onde o sistema recebe dados. A saída padrão é pra onde o sistema manda os dados. O erro padrão é pra onde o
+sistema manda as mensagens de erro.
+</p>
+
+<p>
+Em um sistema GNU Linux, esses 3 estão respectivamente em <code>/dev/stdin</code>, <code>/dev/stdout</code>, <code>/dev/stderr</code>.
+</p>
+
+<p>
+Eles também possuem file descriptors para esses 3 canais, respectivamente 0, 1 e 2.
+</p>
+
+<p>
+Esses 3 dão a possibilidade dos desenvolvedores de criar programas sem se preocupar com de onde os dados vêm ou para onde vão. É daí
+que vêm os dados de quando você chama a função "input" no python, por exemplo, da mesma forma pra onde os dados vão após a função
+"print".
+</p>
+
+<p>
+O shell tem a habilidade de mudar para onde o output de um programa vai ser direcionado, redirecionando de um programa para um arquivo,
+por exemplo, ao invés de uma tela.
+</p>
+</div>
+<div id="outline-container-orge5e94c8" class="outline-3">
+<h3 id="orge5e94c8"><span class="section-number-3">1.1.</span> <a href="#orge5e94c8">Redirecionamentos</a></h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+O redirecionamento do file descriptor de um canal em um ambiente shell é definido pelos sinais &lt; e &gt;.
+</p>
+
+<p>
+Você pode ter diferentes tipos de redirecionamento, e iremos ver todos aqui:
+</p>
+</div>
+<div id="outline-container-org4a2447f" class="outline-4">
+<h4 id="org4a2447f"><span class="section-number-4">1.1.1.</span> <a href="#org4a2447f">Redirecinamento de Output</a></h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+Podemos redirecionar o nosso output de 3 formas em sistemas GNU Linux.
+</p>
+
+<p>
+Vamos usar como exemplo aqui a leitura do arquivo <code>/proc/cpuinfo</code>, que pode ser feita pelo comando <code>cat /proc/cpuinfo</code>.
+</p>
+
+<p>
+Todo redirecionamento de output usa o file descriptor 1 (stdout) como padrão.
+</p>
+
+<ul class="org-ul">
+<li><p>
+&gt;: Redirecionamento com sobrescrita:
+Se eu usar por exemplo o comando:
+<code>cat /proc/cpuinfo &gt; /tmp/cpu.txt</code>
+Eu estarei redirecionando o output do comando <code>cat /proc/cpuinfo</code> para o arquivo <code>/tmp/cpu.txt</code>, criando ele se não existir ou
+sobrescrevendo seu conteúdo caso já exista.
+</p>
+
+<p>
+Esse comando é equivalente a:
+</p>
+
+<p>
+<code>cat /proc/cpuinfo 1&gt; /tmp/cpu.txt</code>
+</p>
+
+<p>
+Mas e se eu não quiser redirecionar o file descriptor 1 (stdout), mas sim o 2 (stderr)?
+</p>
+
+<p>
+Você pode usar o seguinte comando:
+</p>
+
+<p>
+<code>cat /proc/cpu_info 2&gt; /tmp/error.txt</code>
+Ao rodar isso, você recebeu um erro, pois o arquivo que foi tentado ser lido não existe.
+</p>
+
+<p>
+O erro pode ser visto com:
+<code>cat /tmp/error.txt</code>
+</p>
+
+<p>
+E se, caso aquele comando gere qualquer output, isso seja um erro no seu programa?
+Você pode redirecionar um file descriptor para o outro, por exemplo:
+<code>cat /tmp/cpuinfo &gt;&amp;2 2&gt; /tmp/error2.txt</code>
+</p>
+
+<p>
+Rodando esse comando vc verá o mesmo output de <code>/tmp/cpu.txt</code>. Isso é porque o trecho <code>&gt;&amp;2</code> está redirecionando o output do file
+descriptor 1 (stdout) pro file descriptor 2 (stderr) e, em seguida, apontando do file descriptor 2 com <code>2&gt;</code> para o arquivo
+<code>/tmp/error2.txt</code>.
+</p>
+
+<p>
+Você tambêm pode fazer o mesmo, ao inverso, caso queira que erros sejam tratados como output comum (para tratamento de logs de
+erro, por exemplo):
+<code>cat /tmp/cpu_info 2&gt;&amp;1 &gt; /tmp/cpu3.txt</code>
+</p>
+
+<p>
+Contudo, se você quer enviar ambos file descriptor 1 e 2 para o mesmo arquivo, é melhor usar outra possível syntax, que já manda
+ambos para o mesmo lugar:
+<code>cat /tmp/cpuinfo /tmp/cpu_info &amp;&gt; /tmp/cpu4.txt</code>
+</p>
+
+<p>
+Existe também um outro arquivo muito usado <code>/dev/null</code>. Ele é uma lixeira, e costuma ser usada quando você quer ignorar algum output:
+</p>
+<ul class="org-ul">
+<li><code>cat /tmp/cpuinfo /tmp/cpu_info &gt; /tmp/cpu5.txt 2&gt; /dev/null</code>.  Ignora os erros.</li>
+<li><code>cat /tmp/cpuinfo /tmp/cpu_info 2&gt; /tmp/error5.txt &gt; /dev/null</code>.  Ignora o output padrão.</li>
+</ul></li>
+
+<li><p>
+&gt;&gt;: Redirecionamento com append
+Seguindo a exata mesma lógica do outro, contudo, usando &gt;&gt; ao invés de sobrescrever um arquivo, você redireciona o output para ser
+adicionado no final do arquivo.
+</p>
+
+<p>
+Rode esse comando 2 vezes para ver o resultado:
+<code>cat /tmp/cpuinfo /tmp/cpu_info 2&gt; /tmp/error6.txt &gt; /tmp/cpu6.txt</code>
+</p></li>
+
+<li><p>
+|: Redirecionamento de Pipe
+Esse é o que a gente mais usa. Esse símbolo é usado para redirecionar o output do file descriptor 1 (stdout) de um comando para outro.
+</p>
+
+<p>
+Por exemplo:
+<code>cat /proc/cpuinfo | wc</code>
+</p>
+
+<p>
+Isso redireciona o conteúdo do arquivo <code>/proc/cpuinfo</code> para o comando <code>wc</code> (word count), mostrando o número de linhas, seguido pelo de
+palavras, e pelo de caracteres no final.
+</p>
+
+<p>
+Mas e se houver um erro?
+<code>cat /proc/cpu_info | wc</code>
+</p>
+
+<p>
+Você provavelmente vai ver o erro, e uma wourd count de 0. Isso acontece pois o erro foi direcionado para o file descriptor 2, e o pipe
+lê do file descriptor 1.
+</p>
+
+<p>
+Logo, para que o erro seja passado pela pipe, você deve redirecionar o output do file descriptor 2 para o do 1:
+<code>cat /proc/cpu_info 2&gt;&amp;1 | wc</code>
+</p></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org75eb707" class="outline-4">
+<h4 id="org75eb707"><span class="section-number-4">1.1.2.</span> <a href="#org75eb707">Redirecionamento de input</a></h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+Bom, vimos como ficar redirecionando output, seja de erro, seja padrão e inclusive como passar via pipe entre comandos.
+</p>
+
+<p>
+Mas e input?
+</p>
+
+<p>
+Bom, para input nós usamos o símbolo &lt;. E, assim como o padrão do redirecionamento de saída é apontar para o file descriptor 1, o de entrada é
+apontar para o file descriptor 0, logo 0&lt; e &lt; são intercambiáveis.
+</p>
+
+<p>
+Enfim, existem 4 tipos de redirecionamento de input:
+</p>
+
+<ul class="org-ul">
+<li><p>
+&lt;: Redirecionamento padrão:
+Pega o conteúdo do arquivo como input.
+</p>
+
+<p>
+Por exemplo, posso fazer algo como:
+<code>wc &lt; /proc/cpuinfo</code>
+</p>
+
+<p>
+Isso faz exatamente o mesmo que:
+<code>cat /proc/cpuinfo | wc</code>
+</p></li>
+
+<li><p>
+&lt;&lt;: Here String:
+Isso serve para quando você quer criar um texto manualmente.
+Você define um conjunto de caracteres para encerrar o arquivo, e depois passa para o comando.
+</p>
+
+<p>
+Exemplo:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><code>wc &lt;&lt;ABACATADA<span style="color: #a7c080; font-style: italic;">
+Esse &#233; um texto
+Com 4 linhas
+12 palavras
+e 59 caracteres.
+ABACATADA</span>
+</code></pre>
+</div>
+
+<p>
+O mais comum é usar EOF como fim do arquivo, mas qualquer coisa pode ser usada.
+</p></li>
+
+<li><p>
+&lt;&lt;&lt;: Here string:
+Isso serve para quando você quer passar apenas uma string curta para um comando:
+<code>wc &lt;&lt;&lt;"Essa é uma string com 1 linha, 12 palavras e 60 caracters."</code>
+</p>
+
+<p>
+Contudo, Here strings não funcionam em todos os shells disponíveis. Funcionam em bash, em zsh
+com certeza, mas não fazem parte da especificação posix, logo, se estiver em um sistema que não
+as suporte, você pode também fazer algo como:
+<code>echo "Essa é uma string com 1 linha, 12 palavras e 60 caracters." | wc</code>
+</p></li>
+
+<li><p>
+&lt;(): Execução de subshell:
+Isso na realidade não é um redirecionamento de input. Pelo contrário, isso serve para pegar o
+output de um camando e criar um arquivo temporário com ele. Isso pode ser usado para passar algo
+para programas que só aceitam arquivos, mas não aceitam nada no stdin:
+</p>
+
+<p>
+<code>diff &lt;(echo "Essa é uma string com 1 linha, 12 palavras e 60 caracters." | wc) &lt;(wc &lt;&lt;&lt;"Essa é uma string com 1 linha, 12 palavras e 60 caracters.")</code>
+</p>
+
+<p>
+Esse comando mostraria a diferença entre 2 arquivos, um gerado pelo output do primeiro e uma pelo do segundo comando.
+</p>
+
+<p>
+Isso também só existe em alguns shells, como bash e zsh, logo, se não tiver um desses disponível, isso não funcionará.
+</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org8ffa0af" class="outline-3">
+<h3 id="org8ffa0af"><span class="section-number-3">1.2.</span> <a href="#org8ffa0af">Outros File Descriptors</a></h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Vimos os file descriptors 0, 1 e 2. Contudo, podemos ter quantos file descriptors nós quisermos, e trabalhar com eles ao invés dos padrões, por qualquer
+motivo que seja, por exemplo:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><code>&#10140;  sh -c <span style="color: #a7c080;">'
+read -u 3 -r line
+echo $line &gt;&amp;4
+'</span> 3&lt; /proc/cpuinfo 4&gt;&amp;1 | wc
+1       3      14
+</code></pre>
+</div>
+
+<p>
+Esse comando executa um script que lê 1 linha do file descriptor 3, e imprime ela no file descriptor 4.
+O input do file descriptor 3 é populado pelo conteúdo do arquivo /proc/cpuinfo e o output do file
+descriptor 4 é redirecionado para o file descriptor 1, e então pipeado para o comando <code>wc</code>.
+</p>
+</div>
+</div>
+</section>
+<section id="outline-container-org8440bfa" class="outline-2">
+<h2 id="org8440bfa"><span class="section-number-2">2.</span> <a href="#org8440bfa">Encerramento</a></h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Nesse artigo vimos um básico sobre file descriptors e redirecionamentos de entrada e saída, assim como como usar pipes e manipular streams de texto.
+</p>
+
+<p>
+No próximo veremos sobre ferramentas de manipulação de texto.
+</p>
+
+<p>
+Comandos vistos até aqui:
+</p>
+<ul class="org-ul">
+<li>cat =&gt; Concatenate (Lê vários arquivos passados e imprime eles no stdout)</li>
+<li>wc =&gt; Word Count (Conta linhas, palavras e caracteres dos arquivos passados ou conteúdo do standard input)</li>
+<li>diff =&gt; Mostra a difereça entre os arquivos passados.</li>
+<li>read =&gt; Lê uma linha de um file descriptor e passa para uma variável no programa.</li>
+</ul>
+
+<p>
+Até a próxima.
+</p>
+
+</article>
+</div>
+</section>
+</section>
+<footer id="postamble" class="status">
+<span>Edmilson Monteiro Rodrigues Neto</span><span>2026-10-31 Sat 00:00</span><span><a href="mailto:edmilson.rodriguesn38@gmail.com">edmilson.rodriguesn38@gmail.com</a></span>
+</footer>
+</body>
+</html>
