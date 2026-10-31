@@ -14,6 +14,7 @@ get_suffix() {
             print no_suffix
         }'
 }
+export -f get_suffix
 
 get_missing_files() {
     _to=$1
@@ -52,14 +53,29 @@ check_templates() {
         }
     ')
 
-    IFS="\n"; for lan in $changed_languages
-              do
+    _touched_languages=""
 
-              done
+    for lan in $changed_languages
+    do
+        find "static/content/$lan" -type f ! -path "*/templates/*" -exec sh -c '
+                for file do
+                    rel_path=$(echo "$file" | get_suffix 3 "/")
+                    if [ -n "$rel_path" ] && ! echo " "$1" " | grep -qF " $rel_path "
+                    then
+                        touch "${file}"
+                        echo "$2"
+                    fi
+                done
+            ' _ "$_files_output" "$lan" {} + | sort -u | xargs
+    done
 
-    find -type file --exclude="templates"
+    # Remove espaços excedentes
+    _touched_languages=$(echo "$_touched_languages" | xargs)
 
-    echo "$_files_output"
+    if [ -n "$_touched_languages" ]
+    then
+        echo "The directories \"$_touched_languages\" had their templates changed, regenerate the outputs in them running C-c C-e P x." >> /dev/stderr
+    fi
 
     return 0
 }
@@ -77,11 +93,13 @@ main() {
         if [ "$src" = "content" ]
         then
             _contents="$_contents $file"
-            _contents_relative=$(echo "$file" | get_suffix 3 "/")
+            _cr=$(echo "$file" | get_suffix 3 "/")
+            _contents_relative="$_contents_relative $_cr"
         elif [ "$src" = "dist" ]
         then
             _dist="$_dist $file"
-            _dist_relative=$(echo "$file" | get_suffix 3 "/")
+            _dr=$(echo "$file" | get_suffix 3 "/")
+            _dist_relative="$_dist_relative $_dr"
         fi
     done
 
