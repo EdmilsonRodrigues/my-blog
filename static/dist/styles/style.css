@@ -26,9 +26,30 @@ body {
   font-family: var(--font-sans);
   line-height: 1.7;
   font-size: 1.05rem;
-  padding: 0 1.5rem 4rem 1.5rem;
+  padding: 1.5rem 1.5rem 3rem 1.5rem;
   max-width: 1100px;
   margin: 0 auto;
+}
+
+/* ==========================================================================
+   UP / HOME Navigation Bar (Org Mode Top Link)
+   ========================================================================== */
+#org-div-home-and-up {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  color: #71717a;
+}
+
+#org-div-home-and-up a {
+  color: #a1a1aa;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+#org-div-home-and-up a:hover {
+  color: var(--accent-color);
 }
 
 /* ==========================================================================
@@ -83,13 +104,11 @@ section#content.content {
   align-items: start;
 }
 
-/* No desktop (telas maiores que 768px), forçamos o grid de 2 colunas */
 @media (min-width: 768px) {
   section#content.content {
     grid-template-columns: minmax(0, 1fr) 280px;
   }
 
-  /* Pega o aside onde quer que ele esteja dentro do content e joga para a coluna da direita (coluna 2) */
   section#content.content > aside {
     grid-column: 2;
     grid-row: 1 / span 100;
@@ -97,7 +116,6 @@ section#content.content {
     top: 2rem;
   }
 
-  /* Garante que o article fique estritamente na coluna da esquerda (coluna 1) */
   section#content.content > article {
     grid-column: 1;
     grid-row: 1 / span 100;
@@ -179,7 +197,6 @@ p {
   margin-bottom: 1.25rem;
 }
 
-/* Links internos do post com destaque em amarelo */
 article a, section a, p a {
   color: var(--accent-color);
   text-decoration: underline;
@@ -191,7 +208,6 @@ article a:hover, section a:hover, p a:hover {
   color: var(--accent-hover);
 }
 
-/* Listas */
 ol, ul {
   margin-left: 1.5rem;
   margin-bottom: 1.5rem;
@@ -201,7 +217,6 @@ li {
   margin-bottom: 0.5rem;
 }
 
-/* Code & Pre */
 code {
   font-family: var(--font-mono);
   background-color: #27272a;
@@ -225,7 +240,6 @@ pre code {
   padding: 0;
 }
 
-/* Linha divisória */
 hr {
   border: none;
   border-top: 1px solid var(--border-color);
@@ -233,14 +247,39 @@ hr {
 }
 
 /* ==========================================================================
-   Footer
+   Footer (Postamble) - Corrigido e Descolado
    ========================================================================== */
-footer {
-  grid-column: 1 / -1;
-  margin-top: 4rem;
-  padding-top: 2rem;
+footer#postamble {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
   border-top: 1px solid var(--border-color);
-  text-align: center;
-  font-size: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.85rem;
   color: #71717a;
+}
+
+/* Separa os itens do rodapé gerados pelo Org mode com espaçamento limpo */
+footer#postamble span {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Adiciona um separador visual elegante entre as tags do rodapé */
+footer#postamble span:not(:last-child):after {
+  content: "•";
+  margin-left: 1.5rem;
+  color: #52525b;
+}
+
+footer#postamble a {
+  color: #a1a1aa;
+  text-decoration: none;
+}
+
+footer#postamble a:hover {
+  color: var(--accent-color);
 }
