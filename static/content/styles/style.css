@@ -26,10 +26,14 @@ body {
   font-family: var(--font-sans);
   line-height: 1.7;
   font-size: 1.05rem;
-  padding: 1.5rem 1.5rem 3rem 1.5rem;
+  padding: 1.5rem 1.5rem 1.5rem 1.5rem; /* Reduzido de 3rem para 1.5rem embaixo */
   max-width: 1100px;
   margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+
 
 /* ==========================================================================
    UP / HOME Navigation Bar (Org Mode Top Link)
@@ -102,7 +106,9 @@ section#content.content {
   grid-template-columns: 1fr;
   gap: 2.5rem;
   align-items: start;
+  flex: 1; /* Faz o conteúdo preencher o espaço, mas sem exageros */
 }
+
 
 @media (min-width: 768px) {
   section#content.content {
@@ -250,8 +256,8 @@ hr {
    Footer (Postamble) - Corrigido e Descolado
    ========================================================================== */
 footer#postamble {
-  margin-top: 3rem;
-  padding-top: 1.5rem;
+  margin-top: 2rem; /* Reduzido para aproximar do conteúdo */
+  padding-top: 1rem;
   border-top: 1px solid var(--border-color);
   display: flex;
   flex-wrap: wrap;
@@ -261,7 +267,6 @@ footer#postamble {
   font-size: 0.85rem;
   color: #71717a;
 }
-
 /* Separa os itens do rodapé gerados pelo Org mode com espaçamento limpo */
 footer#postamble span {
   display: inline-flex;
