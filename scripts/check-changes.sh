@@ -57,8 +57,12 @@ check_templates() {
 
     for lan in $changed_languages
     do
-        find "static/content/$lan" -type f ! -path "*/templates/*" -exec sh -c '
+        _tl=$(find "static/content/$lan" -type f ! -path "*/templates/*" -exec sh -c '
                 for file do
+                    if echo $file | grep -Eq "^${2}"
+                    then
+                        continue
+                    fi
                     rel_path=$(echo "$file" | get_suffix 3 "/")
                     if [ -n "$rel_path" ] && ! echo " "$1" " | grep -qF " $rel_path "
                     then
@@ -66,7 +70,8 @@ check_templates() {
                         echo "$2"
                     fi
                 done
-            ' _ "$_files_output" "$lan" {} + | sort -u | xargs
+            ' _ "$_files_output" "$lan" {} + | sort -u | xargs)
+        _touched_languages="$_touched_languages $_tl"
     done
 
     # Remove espaços excedentes
@@ -75,6 +80,7 @@ check_templates() {
     if [ -n "$_touched_languages" ]
     then
         echo "The directories \"$_touched_languages\" had their templates changed, regenerate the outputs in them running C-c C-e P x." >> /dev/stderr
+        return 2
     fi
 
     return 0
