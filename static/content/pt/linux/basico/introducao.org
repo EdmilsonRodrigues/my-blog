@@ -2,6 +2,7 @@
 #+SUBTITLE: Conhecendo os comandos GNU e Unix
 #+AUTHOR: Edmilson Monteiro Rodrigues Neto
 #+EMAIL: edmilson.rodriguesn38@gmail.com
+#+DATE: <2026-10-31 Sat>
 #+DESCRIPTION: Uma introdução ao curso de Linux básico de GNU Linux, iniciando com um pouco de shell.
 #+KEYWORDS: linux, gnu, unix, shell, bash
 #+INDEX: Linux!Básico!Introdução á Linha de Comando

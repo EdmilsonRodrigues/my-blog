@@ -2,6 +2,7 @@
 #+SUBTITLE: Heroana blog: um espaço livre
 #+AUTHOR: Edmilson Monteiro Rodrigues Neto
 #+EMAIL: edmilson.rodriguesn38@gmail.com
+#+DATE: <2026-10-31 Sat>
 #+DESCRIPTION: Esse é sobre mim do heroana blog, uma leve introdução sobre mim e sobre o que pode ser encontrado aqui.
 #+KEYWORDS: linux, free-software, devops, go, lisp, python, gitops, kubernetes, k8s
 
@@ -13,7 +14,7 @@
 * Seja muito bem vindo ao meu blog pessoal.
 
 ** Quem sou eu?
- 
+
 Prazer, me chamo Edmilson Rodrigues, e sou um desenvolvedor, e entusiasta de GNU Linux e software livre há pelo menos
 uns 7 anos.
 

@@ -2,6 +2,7 @@
 #+SUBTITLE: Um espaço livre
 #+AUTHOR: Edmilson Monteiro Rodrigues Neto
 #+EMAIL: edmilson.rodriguesn38@gmail.com
+#+DATE: <2026-10-31 Sat>
 #+DESCRIPTION: Esse é o índice do meu blog, aqui se encontra alguns principais tópicos
 #+KEYWORDS: linux, free-software, devops, go, lisp, python, gitops, kubernetes, k8s
 
