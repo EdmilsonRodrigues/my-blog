@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2026-11-02 Mon 13:01 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Introdução à Manipulação de Texto: Parte 2</title>
+<meta name="author" content="Edmilson Monteiro Rodrigues Neto" />
+<meta name="description" content="Uma introdução à manipulação de texto em sistemas UNIX." />
+<meta name="keywords" content="linux, gnu, unix, shell, bash, grep, sed, awk, pipes" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="/styles/style.css" />
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/pt/linux/basico/textos-01.html"> UP </a>
+ |
+ <a accesskey="H" href="/pt"> HOME </a>
+</div><header id="preamble" class="status">
+<h1>Heroana Blog</h1>
+<nav><a href="/pt/">Início</a><a href="/pt/conteudos.html">Conteúdos</a><a href="/pt/sobre.html">Sobre</a></nav>
+</header>
+<section id="content" class="content">
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgdb83858">1. Processando Streams de Texto</a>
+<ul>
+<li><a href="#org00df5bf">1.1. O Básico de sed, o Stream Editor</a></li>
+<li><a href="#orge0f9b3f">1.2. Garantindo Integridade de dados</a></li>
+<li><a href="#org2c1785f">1.3. Olhando de forma mais profunda nos arquivos</a></li>
+<li><a href="#orgaf854da">1.4. Aprofundando em Expressões regulares</a></li>
+</ul>
+</li>
+<li><a href="#org249c638">2. Encerramento</a></li>
+</ul>
+</div>
+</nav>
+<aside id="org7eec351">
+<p>
+
+</p>
+
+<p>
+Principais conteúdos
+</p>
+
+<ul class="org-ul">
+<li><a href="https://blog.edmilsonrodrigues.net.br/pt/linux/basico/">Introdução ao GNU Linux</a></li>
+</ul>
+</aside>
+
+<article>
+<section id="outline-container-orgdb83858" class="outline-2">
+<h2 id="orgdb83858"><span class="section-number-2">1.</span> <a href="#orgdb83858">Processando Streams de Texto</a></h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Bom, no último post aprendemos sobre redirecionamentos e pipes. Agora vamos começar a ver onde usamos essas ferramentas no nosso dia a dia.
+</p>
+
+<p>
+Antes de começarmos, acho que não falei ainda de uma das principais filosofias UNIX:
+</p>
+<ul class="org-ul">
+<li>Cada programa deve ser muito bom, em fazer apenas 1 coisa</li>
+<li>Cada programa deve ser capaz de trabalhar junto com outros programas</li>
+</ul>
+
+<p>
+É a partir desses princípios que a gente começa a entender como funciona.
+</p>
+
+<p>
+Exemplos que nós já vimos:
+</p>
+<ul class="org-ul">
+<li>O comando wc, muito bom em ler um arquivo e dar a quantidade de linhas.</li>
+<li>O comando cat, muito bom em ler arquivos e concatená-los.</li>
+</ul>
+
+<p>
+A partir desses 2, conseguimos criar comandos fazendo com que esses 2 trabalhem juntos, como:
+<code>cat /proc/cpuinfo /proc/stat | wc</code>
+</p>
+
+<p>
+Por sinal, leve curiosidade. Muitos programas que envolvem leitura de arquivos lêem do stdin caso nenhum arquivo seja passado,
+esse é o motivo desses redirecionamentos funcionarem. Isso pode ser visto ao rodar o comando <code>cat</code> sem argumntos, tudo o que
+você digitar e der enter, será enviado ao stdout. (Pressione Ctrl+C para sair).
+</p>
+
+<p>
+Vamos começar agora a usar alguns dos conceitos que já vimos antes pra começar a trabalhar:
+</p>
+
+<p>
+Para isso, vamos criar um arquivo, chamado ftu.txt, contendo uma lista de comandos que iremos usar ao longo desse artigo:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><code>cat &lt;&lt;EOF &gt; ftu.txt<span style="color: #a7c080; font-style: italic;">
+bzcat
+cat
+cut
+head
+less
+md5sum
+nl
+od
+paste
+sed
+sha256sum
+sha512sum
+sort
+split
+tail
+tr
+uniq
+wc
+xzcat
+zcat
+EOF</span>
+</code></pre>
+</div>
+
+<p>
+Okay, agora que esse arquivo está escrito, podemos começar a trabalhar com ele.
+</p>
+
+<p>
+Vamos começar procurando comandos que tenham a string cat. Pra isso, usaremos do programa grep, um
+programa incrível de leitura de texto e busca de padrões.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><code>cat ftu.txt | grep <span style="color: #a7c080;">'cat'</span>
+grep <span style="color: #a7c080;">'cat'</span> ftu.txt
+</code></pre>
+</div>
+
+<p>
+Os 2 comandos acima são equivalentes, contudo, prefira sempre economizar pipes. Logo, se o comando
+grep pode receber arquivos, isso é preferível a adicionar um cat desnecessário.
+</p>
+
+<p>
+Okay, agora vamos ver se o arquivo foi criado com sucesso: <code>ls ftu*</code>.
+</p>
+
+<p>
+O arquivo ftu.txt deve aparecer. Vamos começar a mexer com compressão agora então: <code>gzip ftu.txt</code>,
+e, em seguida, cheque o que houve com o arquivo, com <code>ls ftu*</code>.
+</p>
+
+<p>
+O arquivo ftu.txt sumiu, mas um novo arquivo apareceu, ftu.txt.gz. Isso acontece pois o programa gzip
+realizou a compressão do arquivo ftu.txt para o formato de compressão gzip. Isso destruiu o arquivo
+original, e gerou o novo arquivo comprimido.
+</p>
+
+<p>
+Você pode ver a diferença com um <code>cat ftu.txt.gz</code>. Você pode desfazer isso com <code>gzip -d ftu.txt.gz</code>.
+Ao rodar esse comando, o programa gzip descomprimiu o arquivo, e, portanto, <code>ls ftu*</code> vai mostrar
+novamente o arquivo ftu.txt. Você pode ler ele novamente com <code>cat ftu.txt</code>.
+</p>
+
+<p>
+Okay, agora, comprima-o de novo.
+</p>
+
+<p>
+E se quisermos ler um arquivo comprimido, mas não queremos descomprimí-lo? Para isso existem programas,
+como o <code>zcat</code>. Teste isso com <code>zcat ftu.txt.gz</code>.
+</p>
+
+<p>
+Exitem outros padrões de compressão e programas de leitura de comprimidos muito utilizados em sistemas
+Unix, como gzip (zcat), xz (xzcat), bzip2 (bzcat).
+</p>
+
+<p>
+Okay, agora vamos ver técnicas melhores para ler textos. Imagine que vamos ler um arquivo muuuito grande,
+como /var/log/syslog. Considerando que esse é um arquivo protegido, você deve usar sudo para lê-lo:
+<code>sudo cat /var/log/syslog</code>. Talvez esse arquivo não exista. Se você usar uma distro da família RedHat,
+tente /var/log/messages. Se nenhum dos dois existir, vai num /proc/cpuinfo, ou qualquer outro arquivo bem
+grande.
+</p>
+
+<p>
+Dá pra ver, ao tentar ler esses arquivos com cat, que isso não é muito eficiente. Para isso, podemos usar
+programas como o more ou o less. Se nenhum dos dois vier na sua distro, instale o less. Teste agora, o mesmo
+comando usado anteriormente, mas trocando cat por less. Você verá uma forma muito mais fluida de navegar no
+conteúdo do arquivo.
+</p>
+
+<p>
+Às vezes a gente só quer uma parte do texto, talvez pra ver como a informação é estruturada, às vezes pra pegar
+só o começo, às vezes só os últimos logs. Para isso, podemos usar programas como <code>head</code>, para ver as primeiras
+linhas de um arquivo, e <code>tail</code> para ver as últimas linhas de um arquivo.
+</p>
+
+<p>
+Podemos também usar o programa <code>nl</code> para ajudar nessa visualização. Ele numera as linhas passadas. Podemos ver
+isso com <code>sudo head /var/log/syslog | nl</code>. Podemos também pipear para o comando <code>wc</code> ou qualquer outro que vimos
+até agora. Se você usar tail ou head, você pode dizer quantas linhas você quer ver através da flag -n, com
+<code>head -n 12 /proc/cpuinfo</code>, por exemplo. No comando tail, você também pode passar o comando -f (ou &ndash;follow) para
+continuar seguindo a leitura do arquivo, à medida que novas entradas chegam.
+</p>
+</div>
+<div id="outline-container-org00df5bf" class="outline-3">
+<h3 id="org00df5bf"><span class="section-number-3">1.1.</span> <a href="#org00df5bf">O Básico de sed, o Stream Editor</a></h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Então, agora vamos se aprofundar um pouquinho no grep e no sed.
+</p>
+
+<p>
+Vamos mostrar coisas importantes desses programas:
+</p>
+
+<p>
+Principais flags do grep:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><code>zcat ftu.txt.gz | grep <span style="color: #a7c080;">'cat'</span>     <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Pega as linhas com a substring cat
+</span>zcat ftu.txt.gz | grep -v <span style="color: #a7c080;">'cat'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Pega as linhas sem a substring cat
+</span>zcat ftu.txt.gz | grep -c <span style="color: #a7c080;">'cat'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Pega a contagem das linhas com a substring cat
+</span>zcat ftu.txt.gz | grep -cv <span style="color: #a7c080;">'cat'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Pega a contagem das linhas sem a substring cat
+</span>zcat ftu.txt.gz | grep <span style="color: #a7c080;">'c.t'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Pega as linhas com uma substring que se enquadra em c(qualquer caractere)t
+</span>zcat ftu.txt.gz | grep -F <span style="color: #a7c080;">'c.t'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Pega as linhas com a substring c.t (n&#227;o vai mostrar nada)
+</span>zcat ftu.txt.gz | grep -E <span style="color: #a7c080;">'c[ua]?t'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Pega as linhas com uma substring entre ct, cut e cat
+</span>zcat ftu.txt.gz | grep -n <span style="color: #a7c080;">'cat'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Pega as linhas com uma substring cat e mostra os n&#250;meros das linhas
+</span>zcat ftu.txt.gz | grep -i <span style="color: #a7c080;">'CaT'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Pega as linhas com uma substring CaT ignorando mai&#250;sculas e min&#250;sculas
+</span>zcat ftu.txt.gz | grep -Eo <span style="color: #a7c080;">'[0-9]*sum'</span> <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Pega as linhas com um ou mais d&#237;gitos num&#233;ricos seguidos pelo termo sum e mostra somente os caracteres que batem na regexpr  </span>
+</code></pre>
+</div>
+
+<p>
+É importante treinar o uso do comando grep, pois é um dos mais importantes no gerenciamento de textos. Recomendo testar
+bastante essas flags e combinações delas.
+</p>
+
+<p>
+Dito isso, vamos começar agora com o sed, ou Stream Editor. Essa é uma das ferramentas masi poderosas de longe dos comandos de
+manipulação de texto.
+</p>
+
+<p>
+Vamos começar simulando um grep, com <code>zcat ftu.txt.gz | sed -n /cat/p</code>. O -n serve para impedir o sed de mostrar output que não
+seja explicitamente solicitado. o texto entre as barras é a expressão regular, como as do grep, e p é o comando print, para mostrar
+na tela o que couber na regexpr solicitada. Para realizar agora o equivalente ao grep -v, podemos fazer: <code>zcat ftu.txt.gz | sed /cat/d</code>,
+deletando todas as linhas que não contiverem aquela regexpr.
+</p>
+
+<p>
+Agora, vamos começar para o mais interessante:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><code>zcat ftu.txt.gz | sed <span style="color: #a7c080;">'s/cat/dog/'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Substitui a primeira apari&#231;&#227;o de cat por dog
+</span>zcat ftu.txt.gz | sed <span style="color: #a7c080;">'s/cat/dog/g'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Substitui todas as apari&#231;&#245;es de cat por dog
+</span>zcat ftu.txt.gz | sed <span style="color: #a7c080;">'2d'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Elimina a linha 2
+</span>zcat ftu.txt.gz | sed <span style="color: #a7c080;">'2,7d'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Elimina as linha 2 a 7
+</span>zcat ftu.txt.gz | sed <span style="color: #a7c080;">'2,7d;11d'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Elimina as linha 2 a 7 e a linha 11
+</span>zcat ftu.txt.gz | sed <span style="color: #a7c080;">'2,7d;11d'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Elimina as linha 2 a 7 e a linha 11
+</span>zcat ftu.txt.gz | sed <span style="color: #a7c080;">'1d;/c[ua]t/d'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Elimina a linha 1 e todas as linhas com a substring cut ou cat
+</span>zcat ftu.txt.gz | sed <span style="color: #a7c080;">'1d;/c[ua]t/c REMOVED'</span>  <span style="color: #859289; font-style: italic;"># </span><span style="color: #859289; font-style: italic;">Elimina a linha 1 e substitui todas as linhas com a substring cut ou cat por REMOVED
+</span>gunzip ftu.txt.gz
+sed -i.backup <span style="color: #a7c080;">'s/cat/dog/g'</span> ftu.txt
+</code></pre>
+</div>
+
+<p>
+Após executar cada um desses comandos, voltamos a não possuir o arquivo comprimidom e termos o arquivo original, salvo como ftu.txt.backup
+E uma versão alterada dele ftu.txt com dog no lugar de todos os cats.
+</p>
+</div>
+</div>
+<div id="outline-container-orge0f9b3f" class="outline-3">
+<h3 id="orge0f9b3f"><span class="section-number-3">1.2.</span> <a href="#orge0f9b3f">Garantindo Integridade de dados</a></h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Quando nós estamos manipulando dados, principalmente baixando dados da internet ou algo assim, é importante garantir que esses dados não foram
+alterados. Para isso usamos hashes. Um hash é aplicar uma fórmula matemática em um arquivo, que sempre gerará o mesmo resultado. Quando baixamos
+coisas da internet, é comum termos hashes dos arquivos baixados, para que possamos garantir que não houveram erros de Download ou coisas assim.
+</p>
+
+<p>
+Vamos fazer isso nos nossos novos arquivos:
+</p>
+
+<p>
+Para gerar o hash de ftu.txt (o arquivo com dog no lugar de cat), temos: <code>sha256sum ftu.txt</code>. Se redirecionarmos isso para um arquivo podemos fazer:
+<code>sha256sum ftu.txt &gt; sha256.txt</code>. Podemos conferir esse hash com: <code>sha256sum -c sha256.txt</code>. Devemos receber um ok aqui. Isso significa que o arquivo
+ftu.txt não teve alterações desde a criação do sha256.txt. Agora, vamos restaurar o arquivo original: <code>mv ftu.txt{.backup,}</code>. Isso funcionará no bash,
+no zsh, mas não em todos os shells, logo, também pode ser feito com <code>mv ftu.txt.backup ftu.txt</code>. Esse comando renomeia o arquivo de backup para ftu.txt,
+sobrescrevendo o outro arquivo. Se tentar fazer o check do sha256sum agora, você encontrará um erro, pois os dados do arquivo foram alterados. Agora,
+podemos fazer om que passe de novo, fazendo os dados voltarem a ser o que eram: <code>sed -i 's/cat/dog/g' ftu.txt</code>. Agora o check deve passar de novo,
+</p>
+</div>
+</div>
+<div id="outline-container-org2c1785f" class="outline-3">
+<h3 id="org2c1785f"><span class="section-number-3">1.3.</span> <a href="#org2c1785f">Olhando de forma mais profunda nos arquivos</a></h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+Podemos usar comandos como o od (octal dump) para poder inspecionar melhor arquivos e encontrar possíveis bugs.
+</p>
+
+<p>
+Testemos com <code>od ftu.txt</code>. A primeira coluna de cada linha é o byte offset daquela linha (quantos bytes desde o início do arquivo se passaram). O resto são
+os dados do arquivo em octal. Podemos ver também em hexadecimal, com <code>od -x ftu.txt</code>
+</p>
+
+<p>
+Podemos também ver os caracteres através de <code>od -c ftu.txt</code>.
+</p>
+</div>
+</div>
+<div id="outline-container-orgaf854da" class="outline-3">
+<h3 id="orgaf854da"><span class="section-number-3">1.4.</span> <a href="#orgaf854da">Aprofundando em Expressões regulares</a></h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+Como pôde ser visto, o grep e o sed usam bastantes expressões regulares. Como elas funcionam?
+</p>
+
+<p>
+O tipo mais simples de expressão regular é uma string que identifica a si mesma, como <code>/cat/</code>, uma regexpr que acerta qualquer string que contenha a substring
+cat, inclusive a própria string cat.
+</p>
+
+<p>
+Cada caractere em uma regexpr se chama átomo. A maioria dos átomos representa a si mesmo, como c, a, t, etc. Contudo, alguns têm significados especiais:
+</p>
+<ul class="org-ul">
+<li>.
+Qualquer caractere
+Exemplo:
+<ul class="org-ul">
+<li>c.t =&gt; cut, cat, acatar, cútis, cicuta</li>
+<li>a..ra =&gt; arara, lateral, cameras</li>
+</ul></li>
+<li>^
+O começo de uma linha
+Exemplo:
+<ul class="org-ul">
+<li>^aba =&gt; abacaxi, abacate, abaco</li>
+<li>^.t. =&gt; atadura, etanol, pterodáctilo</li>
+</ul></li>
+<li>$
+O final de uma linha
+Exemplo:
+<ul class="org-ul">
+<li>ada$ =&gt; fada, camada, pomadam laiada</li>
+<li>^.r.ta$ =&gt; prata, grata, brota, gruta</li>
+</ul></li>
+<li>*
+O caracter anterior é repetido 0 ou mais vezes
+Exemplo:
+<ul class="org-ul">
+<li>a.*a =&gt; aardvark, abaco, ambrosia</li>
+<li>pre* =&gt; aprendiz, apreender praxis</li>
+</ul></li>
+<li>?
+O caracter anterior aparece 0 ou 1 vez
+Exemplo:
+<ul class="org-ul">
+<li>xlsx? =&gt; dados.xlsx, dados.xls, camadas.xls</li>
+<li>pree? =&gt; aprendiz, apreender</li>
+</ul></li>
+<li>+
+O caracter anterior aparece 1 ou mais vezes
+Exemplo:
+<ul class="org-ul">
+<li>pre+ =&gt; apreender, aprendiz</li>
+<li>^a.+e =&gt; aperto, antes</li>
+</ul></li>
+<li>\
+Caractere de escape
+Escapa o próximo caractere
+Exemplo:
+<ul class="org-ul">
+<li>a\.t =&gt; casa.txt, loja.tmp</li>
+<li>isso\?$ =&gt; "Você quer isso?", "Quem disso isso?"</li>
+</ul></li>
+</ul>
+
+<p>
+Além dos átomos, contemos grupos de caracteres, com significados diferentes. Veremos seus tipos agora:
+</p>
+
+<ul class="org-ul">
+<li>Expressões de parênteses:
+Interpreta tudo o que está dentro como um átomo
+Exemplo:
+<ul class="org-ul">
+<li>(aba)? =&gt; abacaxi, pandice, malabarismo</li>
+<li>^(ar)+ =&gt; arara, arcada, armada</li>
+</ul></li>
+<li><p>
+Expressões de colchetes:
+Mostra escolhas possíveis de caracteres
+Exemplo:
+</p>
+<ul class="org-ul">
+<li>c[ua]r?t =&gt; cut, cat, abacate, curtida, cartagena</li>
+<li>[0-9]+sum$ =&gt; sha256sum, sha1sum, md5sum</li>
+<li>[a-zA-Z]*[0-9]+ =&gt; 24530, Apache2, K3, 4, 98</li>
+<li>[+-]?[:digit:]+ =&gt; 45, +89, -87, -3</li>
+</ul>
+<p>
+&hellip;
+</p></li>
+<li>Chaves:
+Um identificador de quantidade mais preciso.
+Exemplo:
+<ul class="org-ul">
+<li>(ar){2} =&gt; arara</li>
+<li>[0-9]{3,} =&gt; 456, 456789, 987654321, 987</li>
+<li>[:alpha:]{3,5} =&gt; casa, metas, pés, lixo</li>
+</ul></li>
+</ul>
+
+<p>
+Podemos também fazer referências retroativas, de qualquer expressão dentro de parênteses (), através de \1, \2, etc.
+</p>
+
+<p>
+Exemplo:
+</p>
+<ul class="org-ul">
+<li><code>'([a-z]{2})\1'</code> =&gt; arara, batata</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="outline-container-org249c638" class="outline-2">
+<h2 id="org249c638"><span class="section-number-2">2.</span> <a href="#org249c638">Encerramento</a></h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Bom, cobrimos bastante coisa aqui, mas 2 dos mais poderosos comandos Unix para manipulação de textos, assim como uma
+introdução às expressões regulares é mais que o suficiente pra dar pra brincar bastante. Na próxima, entraremos em
+contato com manipulação e gerenciamento de arquivos, inclusive usando parte do que aprendemos até aqui.
+</p>
+
+<p>
+Espero vê-los por aqui até lá.
+</p>
+
+<p>
+Lista de comandos vistos hoje:
+</p>
+<ul class="org-ul">
+<li>nl</li>
+<li>od</li>
+<li>gzip</li>
+<li>gunzip</li>
+<li>bzip2</li>
+<li>zcat</li>
+<li>bzcat</li>
+<li>xzcat</li>
+<li>bunzip2</li>
+<li>xz</li>
+<li>grep</li>
+<li>sed</li>
+<li>more</li>
+<li>less</li>
+<li>sha256sum</li>
+<li>mv</li>
+</ul>
+
+
+</article>
+</div>
+</section>
+</section>
+<footer id="postamble" class="status">
+<span>Edmilson Monteiro Rodrigues Neto</span><span>2026-11-02 Mon 00:00</span><span><a href="mailto:edmilson.rodriguesn38@gmail.com">edmilson.rodriguesn38@gmail.com</a></span>
+</footer>
+</body>
+</html>

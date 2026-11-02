@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2026-10-31 Sat 10:03 -->
+<!-- 2026-11-02 Mon 13:01 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Introdução à Manipulação de Texto: Parte 1</title>
@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href="/pt/linux/basico/introducao.org"> UP </a>
+ <a accesskey="h" href="/pt/linux/basico/introducao.html"> UP </a>
  |
  <a accesskey="H" href="/pt"> HOME </a>
 </div><header id="preamble" class="status">
@@ -25,22 +25,22 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgec011ca">1. Usar Streams, Pipes e Redirecionamentos</a>
+<li><a href="#orgacf3a37">1. Usar Streams, Pipes e Redirecionamentos</a>
 <ul>
-<li><a href="#orge5e94c8">1.1. Redirecionamentos</a>
+<li><a href="#org2580913">1.1. Redirecionamentos</a>
 <ul>
-<li><a href="#org4a2447f">1.1.1. Redirecinamento de Output</a></li>
-<li><a href="#org75eb707">1.1.2. Redirecionamento de input</a></li>
+<li><a href="#org418ae26">1.1.1. Redirecinamento de Output</a></li>
+<li><a href="#orgda4ccf6">1.1.2. Redirecionamento de input</a></li>
 </ul>
 </li>
-<li><a href="#org8ffa0af">1.2. Outros File Descriptors</a></li>
+<li><a href="#org6031a19">1.2. Outros File Descriptors</a></li>
 </ul>
 </li>
-<li><a href="#org8440bfa">2. Encerramento</a></li>
+<li><a href="#org93cb554">2. Encerramento</a></li>
 </ul>
 </div>
 </nav>
-<aside id="org24f406c">
+<aside id="org7b562f0">
 <p>
 
 </p>
@@ -55,8 +55,8 @@ Principais conteúdos
 </aside>
 
 <article>
-<section id="outline-container-orgec011ca" class="outline-2">
-<h2 id="orgec011ca"><span class="section-number-2">1.</span> <a href="#orgec011ca">Usar Streams, Pipes e Redirecionamentos</a></h2>
+<section id="outline-container-orgacf3a37" class="outline-2">
+<h2 id="orgacf3a37"><span class="section-number-2">1.</span> <a href="#orgacf3a37">Usar Streams, Pipes e Redirecionamentos</a></h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Bom, no post anterior a gente conheceu alguns comandos básicos. Uma coisa que esses comandos geraram pra gente, na maioria do caso,
@@ -99,8 +99,8 @@ O shell tem a habilidade de mudar para onde o output de um programa vai ser dire
 por exemplo, ao invés de uma tela.
 </p>
 </div>
-<div id="outline-container-orge5e94c8" class="outline-3">
-<h3 id="orge5e94c8"><span class="section-number-3">1.1.</span> <a href="#orge5e94c8">Redirecionamentos</a></h3>
+<div id="outline-container-org2580913" class="outline-3">
+<h3 id="org2580913"><span class="section-number-3">1.1.</span> <a href="#org2580913">Redirecionamentos</a></h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 O redirecionamento do file descriptor de um canal em um ambiente shell é definido pelos sinais &lt; e &gt;.
@@ -110,8 +110,8 @@ O redirecionamento do file descriptor de um canal em um ambiente shell é defini
 Você pode ter diferentes tipos de redirecionamento, e iremos ver todos aqui:
 </p>
 </div>
-<div id="outline-container-org4a2447f" class="outline-4">
-<h4 id="org4a2447f"><span class="section-number-4">1.1.1.</span> <a href="#org4a2447f">Redirecinamento de Output</a></h4>
+<div id="outline-container-org418ae26" class="outline-4">
+<h4 id="org418ae26"><span class="section-number-4">1.1.1.</span> <a href="#org418ae26">Redirecinamento de Output</a></h4>
 <div class="outline-text-4" id="text-1-1-1">
 <p>
 Podemos redirecionar o nosso output de 3 formas em sistemas GNU Linux.
@@ -235,8 +235,8 @@ Logo, para que o erro seja passado pela pipe, você deve redirecionar o output d
 </ul>
 </div>
 </div>
-<div id="outline-container-org75eb707" class="outline-4">
-<h4 id="org75eb707"><span class="section-number-4">1.1.2.</span> <a href="#org75eb707">Redirecionamento de input</a></h4>
+<div id="outline-container-orgda4ccf6" class="outline-4">
+<h4 id="orgda4ccf6"><span class="section-number-4">1.1.2.</span> <a href="#orgda4ccf6">Redirecionamento de input</a></h4>
 <div class="outline-text-4" id="text-1-1-2">
 <p>
 Bom, vimos como ficar redirecionando output, seja de erro, seja padrão e inclusive como passar via pipe entre comandos.
@@ -329,8 +329,8 @@ Isso também só existe em alguns shells, como bash e zsh, logo, se não tiver u
 </div>
 </div>
 </div>
-<div id="outline-container-org8ffa0af" class="outline-3">
-<h3 id="org8ffa0af"><span class="section-number-3">1.2.</span> <a href="#org8ffa0af">Outros File Descriptors</a></h3>
+<div id="outline-container-org6031a19" class="outline-3">
+<h3 id="org6031a19"><span class="section-number-3">1.2.</span> <a href="#org6031a19">Outros File Descriptors</a></h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 Vimos os file descriptors 0, 1 e 2. Contudo, podemos ter quantos file descriptors nós quisermos, e trabalhar com eles ao invés dos padrões, por qualquer
@@ -354,8 +354,8 @@ descriptor 4 é redirecionado para o file descriptor 1, e então pipeado para o 
 </div>
 </div>
 </section>
-<section id="outline-container-org8440bfa" class="outline-2">
-<h2 id="org8440bfa"><span class="section-number-2">2.</span> <a href="#org8440bfa">Encerramento</a></h2>
+<section id="outline-container-org93cb554" class="outline-2">
+<h2 id="org93cb554"><span class="section-number-2">2.</span> <a href="#org93cb554">Encerramento</a></h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Nesse artigo vimos um básico sobre file descriptors e redirecionamentos de entrada e saída, assim como como usar pipes e manipular streams de texto.

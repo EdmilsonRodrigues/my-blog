@@ -6,7 +6,7 @@
 #+DESCRIPTION: Uma introdução à manipulação de texto em sistemas UNIX.
 #+KEYWORDS: linux, gnu, unix, shell, bash, grep, sed, awk, pipes
 #+INDEX: Linux!Básico!Introdução á Manipulação de Texto: Parte 1
-#+HTML_LINK_UP: /pt/linux/basico/introducao.org
+#+HTML_LINK_UP: /pt/linux/basico/introducao.html
 
 #+INCLUDE: "../../templates/layout-start.org"
 

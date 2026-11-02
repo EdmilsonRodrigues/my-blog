@@ -18,6 +18,7 @@
 + [[./linux/basico/introducao.org][Introdução à Linha de Comando]]
 + [[./linux/basico/][Introdução ao GNU Linux]]
 + [[./linux/basico/textos-01.org][Introdução à Manipulação de Texto: Parte 1]]
++ [[./linux/basico/textos-02.org][Introdução à Manipulação de Texto: Parte 2]]
 
 ** Conteúdos Principais
 
@@ -27,5 +28,6 @@
 
 + [[./linux/basico/introducao.org][Introdução à Linha de Comando]]
 + [[./linux/basico/textos-01.org][Introdução à Manipulação de Texto: Parte 1]]
++ [[./linux/basico/textos-02.org][Introdução à Manipulação de Texto: Parte 2]]
 
 #+INCLUDE: "./templates/layout-end.org"

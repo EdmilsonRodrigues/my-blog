@@ -1,0 +1,290 @@
+#+TITLE: Introdução à Manipulação de Texto: Parte 2
+#+SUBTITLE: Aprendendo a manipular textos parte 2
+#+AUTHOR: Edmilson Monteiro Rodrigues Neto
+#+EMAIL: edmilson.rodriguesn38@gmail.com
+#+DATE: <2026-11-02 Mon>
+#+DESCRIPTION: Uma introdução à manipulação de texto em sistemas UNIX.
+#+KEYWORDS: linux, gnu, unix, shell, bash, grep, sed, awk, pipes
+#+INDEX: Linux!Básico!Introdução á Manipulação de Texto: Parte 2
+#+HTML_LINK_UP: /pt/linux/basico/textos-01.html
+
+#+INCLUDE: "../../templates/layout-start.org"
+
+* Processando Streams de Texto
+
+Bom, no último post aprendemos sobre redirecionamentos e pipes. Agora vamos começar a ver onde usamos essas ferramentas no nosso dia a dia.
+
+Antes de começarmos, acho que não falei ainda de uma das principais filosofias UNIX:
++ Cada programa deve ser muito bom, em fazer apenas 1 coisa
++ Cada programa deve ser capaz de trabalhar junto com outros programas
+
+É a partir desses princípios que a gente começa a entender como funciona.
+
+Exemplos que nós já vimos:
++ O comando wc, muito bom em ler um arquivo e dar a quantidade de linhas.
++ O comando cat, muito bom em ler arquivos e concatená-los.
+
+A partir desses 2, conseguimos criar comandos fazendo com que esses 2 trabalhem juntos, como:
+=cat /proc/cpuinfo /proc/stat | wc=
+
+Por sinal, leve curiosidade. Muitos programas que envolvem leitura de arquivos lêem do stdin caso nenhum arquivo seja passado,
+esse é o motivo desses redirecionamentos funcionarem. Isso pode ser visto ao rodar o comando =cat= sem argumntos, tudo o que
+você digitar e der enter, será enviado ao stdout. (Pressione Ctrl+C para sair).
+
+Vamos começar agora a usar alguns dos conceitos que já vimos antes pra começar a trabalhar:
+
+Para isso, vamos criar um arquivo, chamado ftu.txt, contendo uma lista de comandos que iremos usar ao longo desse artigo:
+
+#+BEGIN_SRC shell
+  cat <<EOF > ftu.txt
+  bzcat
+  cat
+  cut
+  head
+  less
+  md5sum
+  nl
+  od
+  paste
+  sed
+  sha256sum
+  sha512sum
+  sort
+  split
+  tail
+  tr
+  uniq
+  wc
+  xzcat
+  zcat
+  EOF
+#+END_SRC
+
+Okay, agora que esse arquivo está escrito, podemos começar a trabalhar com ele.
+
+Vamos começar procurando comandos que tenham a string cat. Pra isso, usaremos do programa grep, um
+programa incrível de leitura de texto e busca de padrões.
+
+#+BEGIN_SRC shell
+  cat ftu.txt | grep 'cat'
+  grep 'cat' ftu.txt
+#+END_SRC
+
+Os 2 comandos acima são equivalentes, contudo, prefira sempre economizar pipes. Logo, se o comando
+grep pode receber arquivos, isso é preferível a adicionar um cat desnecessário.
+
+Okay, agora vamos ver se o arquivo foi criado com sucesso: =ls ftu*=.
+
+O arquivo ftu.txt deve aparecer. Vamos começar a mexer com compressão agora então: =gzip ftu.txt=,
+e, em seguida, cheque o que houve com o arquivo, com =ls ftu*=.
+
+O arquivo ftu.txt sumiu, mas um novo arquivo apareceu, ftu.txt.gz. Isso acontece pois o programa gzip
+realizou a compressão do arquivo ftu.txt para o formato de compressão gzip. Isso destruiu o arquivo
+original, e gerou o novo arquivo comprimido.
+
+Você pode ver a diferença com um =cat ftu.txt.gz=. Você pode desfazer isso com =gzip -d ftu.txt.gz=.
+Ao rodar esse comando, o programa gzip descomprimiu o arquivo, e, portanto, =ls ftu*= vai mostrar
+novamente o arquivo ftu.txt. Você pode ler ele novamente com =cat ftu.txt=.
+
+Okay, agora, comprima-o de novo.
+
+E se quisermos ler um arquivo comprimido, mas não queremos descomprimí-lo? Para isso existem programas,
+como o =zcat=. Teste isso com =zcat ftu.txt.gz=.
+
+Exitem outros padrões de compressão e programas de leitura de comprimidos muito utilizados em sistemas
+Unix, como gzip (zcat), xz (xzcat), bzip2 (bzcat).
+
+Okay, agora vamos ver técnicas melhores para ler textos. Imagine que vamos ler um arquivo muuuito grande,
+como /var/log/syslog. Considerando que esse é um arquivo protegido, você deve usar sudo para lê-lo:
+=sudo cat /var/log/syslog=. Talvez esse arquivo não exista. Se você usar uma distro da família RedHat,
+tente /var/log/messages. Se nenhum dos dois existir, vai num /proc/cpuinfo, ou qualquer outro arquivo bem
+grande.
+
+Dá pra ver, ao tentar ler esses arquivos com cat, que isso não é muito eficiente. Para isso, podemos usar
+programas como o more ou o less. Se nenhum dos dois vier na sua distro, instale o less. Teste agora, o mesmo
+comando usado anteriormente, mas trocando cat por less. Você verá uma forma muito mais fluida de navegar no
+conteúdo do arquivo.
+
+Às vezes a gente só quer uma parte do texto, talvez pra ver como a informação é estruturada, às vezes pra pegar
+só o começo, às vezes só os últimos logs. Para isso, podemos usar programas como =head=, para ver as primeiras
+linhas de um arquivo, e =tail= para ver as últimas linhas de um arquivo.
+
+Podemos também usar o programa =nl= para ajudar nessa visualização. Ele numera as linhas passadas. Podemos ver
+isso com =sudo head /var/log/syslog | nl=. Podemos também pipear para o comando =wc= ou qualquer outro que vimos
+até agora. Se você usar tail ou head, você pode dizer quantas linhas você quer ver através da flag -n, com
+=head -n 12 /proc/cpuinfo=, por exemplo. No comando tail, você também pode passar o comando -f (ou --follow) para
+continuar seguindo a leitura do arquivo, à medida que novas entradas chegam.
+
+** O Básico de sed, o Stream Editor
+
+Então, agora vamos se aprofundar um pouquinho no grep e no sed.
+
+Vamos mostrar coisas importantes desses programas:
+
+Principais flags do grep:
+#+BEGIN_SRC shell
+  zcat ftu.txt.gz | grep 'cat'     # Pega as linhas com a substring cat
+  zcat ftu.txt.gz | grep -v 'cat'  # Pega as linhas sem a substring cat
+  zcat ftu.txt.gz | grep -c 'cat'  # Pega a contagem das linhas com a substring cat
+  zcat ftu.txt.gz | grep -cv 'cat'  # Pega a contagem das linhas sem a substring cat
+  zcat ftu.txt.gz | grep 'c.t'  # Pega as linhas com uma substring que se enquadra em c(qualquer caractere)t
+  zcat ftu.txt.gz | grep -F 'c.t'  # Pega as linhas com a substring c.t (não vai mostrar nada)
+  zcat ftu.txt.gz | grep -E 'c[ua]?t'  # Pega as linhas com uma substring entre ct, cut e cat
+  zcat ftu.txt.gz | grep -n 'cat'  # Pega as linhas com uma substring cat e mostra os números das linhas
+  zcat ftu.txt.gz | grep -i 'CaT'  # Pega as linhas com uma substring CaT ignorando maiúsculas e minúsculas
+  zcat ftu.txt.gz | grep -Eo '[0-9]*sum' # Pega as linhas com um ou mais dígitos numéricos seguidos pelo termo sum e mostra somente os caracteres que batem na regexpr
+#+END_SRC
+
+É importante treinar o uso do comando grep, pois é um dos mais importantes no gerenciamento de textos. Recomendo testar
+bastante essas flags e combinações delas.
+
+Dito isso, vamos começar agora com o sed, ou Stream Editor. Essa é uma das ferramentas masi poderosas de longe dos comandos de
+manipulação de texto.
+
+Vamos começar simulando um grep, com =zcat ftu.txt.gz | sed -n /cat/p=. O -n serve para impedir o sed de mostrar output que não
+seja explicitamente solicitado. o texto entre as barras é a expressão regular, como as do grep, e p é o comando print, para mostrar
+na tela o que couber na regexpr solicitada. Para realizar agora o equivalente ao grep -v, podemos fazer: =zcat ftu.txt.gz | sed /cat/d=,
+deletando todas as linhas que não contiverem aquela regexpr.
+
+Agora, vamos começar para o mais interessante:
+
+#+BEGIN_SRC shell
+  zcat ftu.txt.gz | sed 's/cat/dog/'  # Substitui a primeira aparição de cat por dog
+  zcat ftu.txt.gz | sed 's/cat/dog/g'  # Substitui todas as aparições de cat por dog
+  zcat ftu.txt.gz | sed '2d'  # Elimina a linha 2
+  zcat ftu.txt.gz | sed '2,7d'  # Elimina as linha 2 a 7
+  zcat ftu.txt.gz | sed '2,7d;11d'  # Elimina as linha 2 a 7 e a linha 11
+  zcat ftu.txt.gz | sed '2,7d;11d'  # Elimina as linha 2 a 7 e a linha 11
+  zcat ftu.txt.gz | sed '1d;/c[ua]t/d'  # Elimina a linha 1 e todas as linhas com a substring cut ou cat
+  zcat ftu.txt.gz | sed '1d;/c[ua]t/c REMOVED'  # Elimina a linha 1 e substitui todas as linhas com a substring cut ou cat por REMOVED
+  gunzip ftu.txt.gz
+  sed -i.backup 's/cat/dog/g' ftu.txt
+#+END_SRC
+
+Após executar cada um desses comandos, voltamos a não possuir o arquivo comprimidom e termos o arquivo original, salvo como ftu.txt.backup
+E uma versão alterada dele ftu.txt com dog no lugar de todos os cats.
+
+** Garantindo Integridade de dados
+
+Quando nós estamos manipulando dados, principalmente baixando dados da internet ou algo assim, é importante garantir que esses dados não foram
+alterados. Para isso usamos hashes. Um hash é aplicar uma fórmula matemática em um arquivo, que sempre gerará o mesmo resultado. Quando baixamos
+coisas da internet, é comum termos hashes dos arquivos baixados, para que possamos garantir que não houveram erros de Download ou coisas assim.
+
+Vamos fazer isso nos nossos novos arquivos:
+
+Para gerar o hash de ftu.txt (o arquivo com dog no lugar de cat), temos: =sha256sum ftu.txt=. Se redirecionarmos isso para um arquivo podemos fazer:
+=sha256sum ftu.txt > sha256.txt=. Podemos conferir esse hash com: =sha256sum -c sha256.txt=. Devemos receber um ok aqui. Isso significa que o arquivo
+ftu.txt não teve alterações desde a criação do sha256.txt. Agora, vamos restaurar o arquivo original: =mv ftu.txt{.backup,}=. Isso funcionará no bash,
+no zsh, mas não em todos os shells, logo, também pode ser feito com =mv ftu.txt.backup ftu.txt=. Esse comando renomeia o arquivo de backup para ftu.txt,
+sobrescrevendo o outro arquivo. Se tentar fazer o check do sha256sum agora, você encontrará um erro, pois os dados do arquivo foram alterados. Agora,
+podemos fazer om que passe de novo, fazendo os dados voltarem a ser o que eram: =sed -i 's/cat/dog/g' ftu.txt=. Agora o check deve passar de novo,
+
+** Olhando de forma mais profunda nos arquivos
+
+Podemos usar comandos como o od (octal dump) para poder inspecionar melhor arquivos e encontrar possíveis bugs.
+
+Testemos com =od ftu.txt=. A primeira coluna de cada linha é o byte offset daquela linha (quantos bytes desde o início do arquivo se passaram). O resto são
+os dados do arquivo em octal. Podemos ver também em hexadecimal, com =od -x ftu.txt=
+
+Podemos também ver os caracteres através de =od -c ftu.txt=.
+
+** Aprofundando em Expressões regulares
+
+Como pôde ser visto, o grep e o sed usam bastantes expressões regulares. Como elas funcionam?
+
+O tipo mais simples de expressão regular é uma string que identifica a si mesma, como =/cat/=, uma regexpr que acerta qualquer string que contenha a substring
+cat, inclusive a própria string cat.
+
+Cada caractere em uma regexpr se chama átomo. A maioria dos átomos representa a si mesmo, como c, a, t, etc. Contudo, alguns têm significados especiais:
++ .
+  Qualquer caractere
+  Exemplo:
+  - c.t => cut, cat, acatar, cútis, cicuta
+  - a..ra => arara, lateral, cameras
++ ^
+  O começo de uma linha
+  Exemplo:
+  - ^aba => abacaxi, abacate, abaco
+  - ^.t. => atadura, etanol, pterodáctilo
++ $
+  O final de uma linha
+  Exemplo:
+  - ada$ => fada, camada, pomadam laiada
+  - ^.r.ta$ => prata, grata, brota, gruta
++ *
+  O caracter anterior é repetido 0 ou mais vezes
+  Exemplo:
+  - a.*a => aardvark, abaco, ambrosia
+  - pre* => aprendiz, apreender praxis
++ ?
+  O caracter anterior aparece 0 ou 1 vez
+  Exemplo:
+  - xlsx? => dados.xlsx, dados.xls, camadas.xls
+  - pree? => aprendiz, apreender
++ +
+  O caracter anterior aparece 1 ou mais vezes
+  Exemplo:
+  - pre+ => apreender, aprendiz
+  - ^a.+e => aperto, antes
++ \
+  Caractere de escape
+  Escapa o próximo caractere
+  Exemplo:
+  - a\.t => casa.txt, loja.tmp
+  - isso\?$ => "Você quer isso?", "Quem disso isso?"
+
+Além dos átomos, contemos grupos de caracteres, com significados diferentes. Veremos seus tipos agora:
+
++ Expressões de parênteses:
+  Interpreta tudo o que está dentro como um átomo
+  Exemplo:
+  - (aba)? => abacaxi, pandice, malabarismo
+  - ^(ar)+ => arara, arcada, armada
++ Expressões de colchetes:
+  Mostra escolhas possíveis de caracteres
+  Exemplo:
+  - c[ua]r?t => cut, cat, abacate, curtida, cartagena
+  - [0-9]+sum$ => sha256sum, sha1sum, md5sum
+  - [a-zA-Z]*[0-9]+ => 24530, Apache2, K3, 4, 98
+  - [+-]?[:digit:]+ => 45, +89, -87, -3
+  ...
++ Chaves:
+  Um identificador de quantidade mais preciso.
+  Exemplo:
+  - (ar){2} => arara
+  - [0-9]{3,} => 456, 456789, 987654321, 987
+  - [:alpha:]{3,5} => casa, metas, pés, lixo
+
+Podemos também fazer referências retroativas, de qualquer expressão dentro de parênteses (), através de \1, \2, etc.
+
+Exemplo:
++ ='([a-z]{2})\1'= => arara, batata
+
+* Encerramento
+
+Bom, cobrimos bastante coisa aqui, mas 2 dos mais poderosos comandos Unix para manipulação de textos, assim como uma
+introdução às expressões regulares é mais que o suficiente pra dar pra brincar bastante. Na próxima, entraremos em
+contato com manipulação e gerenciamento de arquivos, inclusive usando parte do que aprendemos até aqui.
+
+Espero vê-los por aqui até lá.
+
+Lista de comandos vistos hoje:
++ nl
++ od
++ gzip
++ gunzip
++ bzip2
++ zcat
++ bzcat
++ xzcat
++ bunzip2
++ xz
++ grep
++ sed
++ more
++ less
++ sha256sum
++ mv
+
+
+#+INCLUDE: "../../templates/layout-end.org"
